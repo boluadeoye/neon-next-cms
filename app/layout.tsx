@@ -15,8 +15,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="brand">{process.env.NEXT_PUBLIC_SITE_NAME ?? 'My Site'}</div>
             <nav className="nav-links">
               <a href="/">Home</a>
+              <a href="/blog">Blog</a>
               <a href="/admin">Admin</a>
               <a href="/admin/posts">Posts</a>
+              <a href="/admin/pages">Pages</a>
               <a href="/login">Login</a>
               <a href="/register">Register</a>
               <a href="/api/health">Health</a>
