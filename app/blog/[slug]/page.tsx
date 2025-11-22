@@ -65,9 +65,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <>
       <ProgressBar />
 
-      {/* Hero (centered width) */}
+      {/* Compact hero */}
       <section className="post-hero">
-        <div className="container-narrow article">
+        <div className="article">
           <h1 className="post-title">{post.title}</h1>
           <div className="post-meta">
             {date ? new Date(date).toLocaleDateString() : ''} • {rt.minutes} min read
@@ -88,7 +88,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
       </section>
 
-      {/* Content + TOC grid */}
+      {/* Compact grid: article + TOC */}
       <section className="container">
         <div className="post-grid">
           <article className="article">

@@ -302,3 +302,31 @@ a:hover{opacity:.9}
 .comment-body { margin:6px 0 0; white-space:pre-wrap; }
 .comment-form { display:grid; gap:10px; margin-top:12px; }
 .comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }
+
+/* ---- Screen-fit guard rails (no sideways spill) ---- */
+html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+
+/* All media never exceed viewport */
+img, video, canvas, iframe { max-width: 100%; height: auto; }
+
+/* Containers always clamp to screen; include safe-area gutters */
+.container,
+.container-narrow,
+.article {
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: max(var(--s4), env(safe-area-inset-left));
+  padding-right: max(var(--s4), env(safe-area-inset-right));
+}
+
+/* Post grid never wider than screen on mobile */
+.post-grid { width: 100%; }
+
+/* Clip accidental horizontal overflow from absolute/shadowed bits */
+section, header, footer { overflow-x: clip; }
+
+/* Responsive title size so it can't blow the layout */
+.post-title { font-size: clamp(26px, 6vw, 42px); }
+
+/* Actions bar and TOC respect container width */
+.actions-bar, .toc { max-width: 100%; }
