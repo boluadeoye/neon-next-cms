@@ -409,3 +409,100 @@ img, video, canvas, iframe { display: block; max-width: 100%; height: auto; }
 
 /* Defensive word wrapping */
 .prose, .article { overflow-wrap: break-word; word-break: break-word; }
+
+/* === CENTER + NO-CUT HARD FIX === */
+:root{ --gutter:16px; --page-max:1240px; --content-max:760px; }
+
+/* Never allow horizontal drift */
+*,*::before,*::after{ box-sizing:border-box; }
+html,body{ width:100%; max-width:100%; overflow-x:hidden; }
+
+/* Always-centered wrappers with safe gutters */
+.container{
+  width:100%;
+  max-width: min(var(--page-max), 100vw - calc(var(--gutter) * 2));
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+.container-narrow,
+.article{
+  width:100%;
+  max-width: min(var(--content-max), 100vw - calc(var(--gutter) * 2));
+  margin-inline:auto;
+  padding-inline:var(--gutter);
+}
+
+/* Grid can’t force children wider than tracks */
+.post-grid{ display:grid; gap:28px; width:100%; }
+.post-grid > *{ min-width:0; }
+@media(min-width:1100px){
+  .post-grid{ grid-template-columns:minmax(0,1fr) 320px; align-items:start; }
+}
+
+/* TOC: centered under article on mobile, sticky at right on desktop */
+.toc{ max-width:100%; width:100%; border:1px solid rgb(var(--line)); border-radius:16px; background:#fff; padding:14px; box-shadow:var(--shadow); }
+@media(max-width:1099px){ .toc{ max-width: min(var(--content-max), 100vw - calc(var(--gutter)*2)); margin-inline:auto; position:static; } }
+@media(min-width:1100px){ .toc{ position:sticky; top:90px; } }
+.toc h3{ margin:0 0 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px }
+.toc ul{ list-style:none; margin:0; padding:0; }
+.toc a{ display:block; padding:6px 8px; border-radius:8px; color:var(--muted); text-decoration:none; }
+.toc a:hover{ background:#f3f4f6; color:var(--text); }
+.toc .h2{ padding-left:12px; } .toc .h3{ padding-left:22px; }
+
+/* Media can’t overflow */
+img,video,canvas,iframe{ display:block; max-width:100%; height:auto; }
+
+/* Titles can’t push layout */
+.post-title{ font-size:clamp(24px,6vw,42px); }
+
+/* ---------- BEAUTIFUL CHIP BUTTONS ---------- */
+/* Base chip (used by .btn, .share-chip, .like-pill) */
+.chip-base{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+  border:1px solid transparent;
+  background: linear-gradient(#fff,#fff) padding-box,
+             linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box; /* ochre->navy */
+  box-shadow: 0 6px 18px rgba(13,35,64,.08);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+  color:var(--navy);
+}
+.chip-base:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.12); filter:saturate(1.03); }
+
+/* Primary ochre fill chip */
+.chip-primary{
+  background: var(--ochre);
+  color:#fff;
+  border-color:#a97a30;
+  box-shadow: 0 8px 20px rgba(194,139,55,.26);
+}
+.chip-primary:hover{ filter:saturate(1.06) brightness(1.02); }
+
+/* Ghost chip (soft glass) */
+.chip-ghost{
+  background: rgba(255,255,255,.85);
+  color: var(--navy);
+  border:1px solid rgb(var(--line));
+}
+
+/* Map existing classes to chip styles */
+.btn{ composes: chip-base; }           /* if your tooling doesn’t support composes, fall back below */
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+      border:1px solid transparent; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box; color:var(--navy); box-shadow:0 6px 18px rgba(13,35,64,.08); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.12); filter:saturate(1.03); }
+.btn-ochre{ background:var(--ochre); color:#fff; border-color:#a97a30; box-shadow:0 8px 20px rgba(194,139,55,.26); }
+.btn-ghost{ background:rgba(255,255,255,.85); color:var(--navy); border:1px solid rgb(var(--line)); }
+
+/* Share + Like become chips too */
+.share-chip{ composes: chip-base; } /* fallback if composes unsupported below */
+.share-chip{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+             border:1px solid transparent; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box; color:var(--navy); box-shadow:0 6px 18px rgba(13,35,64,.08); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.share-chip:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.12); filter:saturate(1.03); }
+
+.like-pill{ composes: chip-base; } /* fallback: */
+.like-pill{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+            border:1px solid transparent; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box; color:var(--navy); box-shadow:0 6px 18px rgba(13,35,64,.08); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.like-pill.liked{ background:linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.95), rgba(13,35,64,.7)) border-box; color:var(--navy); }
+
+/* Inputs match chips radius */
+.input{ border-radius:14px; }
