@@ -10,8 +10,8 @@ export default function PostCardCompact({
   date?: string | null;
   cover?: string | null;
 }) {
-  const niceDate = date ? new Date(date).toLocaleDateString() : '';
-  const showExcerpt = !!(excerpt && excerpt !== 'null' && excerpt !== 'undefined');
+  const d = date ? new Date(date).toLocaleDateString() : '';
+  const showEx = !!(excerpt && excerpt !== 'null' && excerpt !== 'undefined');
 
   return (
     <motion.a
@@ -23,8 +23,8 @@ export default function PostCardCompact({
       {cover ? <img className="latest-thumb" src={cover} alt="" /> : <div className="latest-thumb" />}
       <div>
         <h3 className="latest-title">{title}</h3>
-        {showExcerpt ? <p className="line-2" style={{ color:'var(--muted)', margin:0 }}>{excerpt}</p> : null}
-        {niceDate ? <p className="latest-meta" style={{ marginTop: showExcerpt ? 6 : 0 }}>{niceDate}</p> : null}
+        {showEx ? <p className="line-2" style={{ color:'var(--muted)', margin:0 }}>{excerpt}</p> : null}
+        {d ? <p className="latest-meta" style={{ marginTop: showEx ? 6 : 0 }}>{d}</p> : null}
       </div>
     </motion.a>
   );
