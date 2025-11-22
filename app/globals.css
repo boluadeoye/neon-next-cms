@@ -562,3 +562,83 @@ img,video,canvas,iframe{ display:block; max-width:100%; height:auto; }
 /* Center + clamp everything in Admin pages */
 .admin-container{ width:100%; max-width: min(var(--page-max), 100vw - 32px); margin-inline:auto; }
 .admin-main{ width:100%; max-width: min(var(--content-max), 100vw - 32px); margin-inline:auto; }
+
+/* ===== Admin compact form reset (overrides) ===== */
+
+/* Center everything and clamp width */
+.admin-container, .admin-main, .admin-card, .form {
+  width: 100%;
+  max-width: min(var(--content-max), 100vw - 32px);
+  margin-inline: auto;
+}
+
+/* Labels + fields layout */
+.label {
+  display: block;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 6px;
+}
+
+.form-row { margin-bottom: 12px; }
+
+/* Inputs (compact, consistent) */
+.input, textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid rgb(var(--line));
+  border-radius: 12px;
+  background: #fff;
+  color: var(--text);
+  outline: none;
+  line-height: 1.35;
+  box-shadow: inset 0 0 0 0 rgba(0,0,0,0);
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+.input::placeholder, textarea::placeholder { color: #9aa4b2; }
+.input:focus, textarea:focus, select:focus {
+  border-color: #a97a30; /* ochre-600 */
+  box-shadow: 0 0 0 3px rgba(194,139,55,.18);
+  background:#fff;
+}
+
+/* Textarea height */
+textarea.input { min-height: 140px; resize: vertical; }
+
+/* Field hints */
+.help { color: var(--muted); font-size: 13px; margin-top: 6px; }
+
+/* Admin subnav: slimmer chips, centered, mobile-scrollable */
+.admin-subnav{
+  position: sticky; top: 60px; z-index: 20;
+  display:flex; gap:8px;
+  overflow-x:auto; -webkit-overflow-scrolling: touch;
+  background:#fff; border:1px solid rgb(var(--line)); border-radius:16px;
+  padding:8px; margin:16px auto;
+  max-width: min(var(--page-max), 100vw - 32px);
+  box-shadow: var(--shadow);
+}
+.chip-nav{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; text-decoration:none;
+  background:#fff; color:var(--navy);
+  border:1px solid rgb(var(--line));
+  transition:transform .15s ease, box-shadow .15s ease;
+  white-space: nowrap;
+}
+.chip-nav:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(13,35,64,.1); }
+
+/* Cards + table clamp */
+.admin-card{ background:#fff; border:1px solid rgb(var(--line)); border-radius:16px; padding:16px; box-shadow: var(--shadow); }
+.table-wrap{ width:100%; overflow-x:auto; }
+
+/* Chip-style buttons (nicer look) */
+.btn{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+      border:1px solid transparent; background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box;
+      color:var(--navy); box-shadow:0 6px 18px rgba(13,35,64,.08); transition:transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.btn:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.12); filter:saturate(1.03); }
+.btn-ochre{ background:var(--ochre); color:#fff; border-color:#a97a30; box-shadow:0 8px 20px rgba(194,139,55,.26); }
+.btn-ghost{ background:rgba(255,255,255,.9); color:var(--navy); border:1px solid rgb(var(--line)); }
+
+/* Keep everything centered and screen-fit on small screens */
+section, header, footer, main, article, aside { overflow-x: visible !important; }
