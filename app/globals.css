@@ -254,3 +254,51 @@ a:hover{opacity:.9}
 .comment-body { margin:6px 0 0; white-space:pre-wrap; }
 .comment-form { display:grid; gap:10px; margin-top:12px; }
 .comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }
+
+/* ---- Post page: centered article + stable 2-col grid ---- */
+.post-grid { display: grid; gap: 28px; }
+@media (min-width: 1100px) { .post-grid { grid-template-columns: minmax(0,1fr) 320px; align-items: start; } }
+
+/* Center content column regardless of grid width */
+.article { max-width: var(--content); margin: 0 auto; }
+
+/* Hero spacing tune */
+.post-hero { padding: var(--s12) 0 var(--s6); }
+.post-title { font-family: var(--font-display); font-size: 36px; line-height: 1.2; margin: 0 0 10px; }
+@media(min-width:700px){ .post-title { font-size: 42px; } }
+.post-meta { color: var(--muted); font-size: 14px; }
+
+/* Prose refinements (lists/paragraph rhythm, code wrap) */
+.prose { color: var(--text); }
+.prose p { margin: 14px 0; }
+.prose ul, .prose ol { margin: 12px 0 12px 20px; }
+.prose li { margin: 6px 0; }
+.prose pre { white-space: pre; overflow: auto; }
+.prose code { word-break: break-word; }
+.prose hr { border: 0; border-top: 1px solid rgb(var(--line)); margin: 18px 0; }
+
+/* TOC behavior: stacks below article on mobile, sticky right on desktop */
+.toc { border:1px solid rgb(var(--line)); border-radius:16px; background:#fff; padding:14px; box-shadow: var(--shadow); }
+@media(min-width:1100px){ .toc { position: sticky; top: 90px; } }
+.toc h3 { margin:0 0 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px }
+.toc ul { list-style:none; margin:0; padding:0; }
+.toc a { display:block; padding:6px 8px; border-radius:8px; color:var(--muted); text-decoration:none; }
+.toc a:hover { background:#f3f4f6; color:var(--text); }
+.toc .h2 { padding-left:12px; }
+.toc .h3 { padding-left:22px; }
+
+/* Actions bar polish */
+.actions-wrap { margin: var(--s6) 0 var(--s6); }
+.actions-bar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; border:1px solid rgb(var(--line)); border-radius:14px; padding:10px; background:#fff; box-shadow: var(--shadow); }
+.like-pill { display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px; border:1px solid rgb(var(--line)); background:#fff; cursor:pointer; user-select:none; }
+.like-pill.liked { background: linear-gradient(#fff,#fff) padding-box, linear-gradient(135deg, rgba(194,139,55,.7), rgba(13,35,64,.5)) border-box; border:1px solid transparent; color:var(--navy); box-shadow: var(--shadow); }
+.share-chip { display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px; border:1px solid rgb(var(--line)); background:#fff; text-decoration:none; color:inherit; }
+
+/* Comments block spacing */
+.comments-wrap { margin-top: var(--s12); }
+.comment-card { border:1px solid rgb(var(--line)); border-radius:14px; background:#fff; box-shadow: var(--shadow); padding:12px; }
+.comment-author { font-weight:600; margin:0 0 4px; }
+.comment-time { color:var(--muted); font-size:12px; }
+.comment-body { margin:6px 0 0; white-space:pre-wrap; }
+.comment-form { display:grid; gap:10px; margin-top:12px; }
+.comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }

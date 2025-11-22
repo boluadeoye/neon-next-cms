@@ -27,13 +27,13 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     WHERE LOWER(slug) = LOWER(${params.slug}) AND status = 'published'
     LIMIT 1
   `) as PostFull[];
-
   if (rows.length === 0) notFound();
+
   const post = rows[0];
   const date = post.published_at || post.updated_at || null;
   const rt = readingTime(post.content);
 
-  const tagRows = (await sql`
+  const tags = (await sql`
     SELECT t.name, t.slug
     FROM tags t
     JOIN post_tags pt ON pt.tag_id = t.id
@@ -65,33 +65,40 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <>
       <ProgressBar />
 
-      <section className="post-hero container-narrow">
-        <h1 className="post-title">{post.title}</h1>
-        <div className="post-meta">
-          {date ? new Date(date).toLocaleDateString() : ''} • {rt.minutes} min read
-        </div>
-        {post.cover_image_url ? (
-          <img src={post.cover_image_url} alt="" style={{ width:'100%', borderRadius: 16, border: '1px solid rgba(2,6,23,.08)', marginTop:12 }} />
-        ) : null}
-
-        <div className="actions-wrap">
-          <div className="actions-bar">
-            <LikeButton slug={post.slug} />
-            <ShareBar title={post.title} url={fullUrl} />
+      {/* Hero (centered width) */}
+      <section className="post-hero">
+        <div className="container-narrow article">
+          <h1 className="post-title">{post.title}</h1>
+          <div className="post-meta">
+            {date ? new Date(date).toLocaleDateString() : ''} • {rt.minutes} min read
+          </div>
+          {post.cover_image_url ? (
+            <img
+              src={post.cover_image_url}
+              alt=""
+              style={{ width:'100%', borderRadius: 16, border: '1px solid rgba(2,6,23,.08)', marginTop:12 }}
+            />
+          ) : null}
+          <div className="actions-wrap">
+            <div className="actions-bar">
+              <LikeButton slug={post.slug} />
+              <ShareBar title={post.title} url={fullUrl} />
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="container post-layout" style={{ paddingBottom:'48px' }}>
-        <div>
-          <div className="container-narrow" style={{ maxWidth:'unset' }}>
+      {/* Content + TOC grid */}
+      <section className="container">
+        <div className="post-grid">
+          <article className="article">
             <MarkdownView content={post.content} />
 
-            {tagRows?.length ? (
+            {tags?.length ? (
               <>
                 <hr className="div" />
                 <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                  {tagRows.map(t => <TagChip key={t.slug} name={t.name} slug={t.slug} />)}
+                  {tags.map(t => <TagChip key={t.slug} name={t.name} slug={t.slug} />)}
                 </div>
               </>
             ) : null}
@@ -107,20 +114,20 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
             </div>
 
             <Comments slug={post.slug} />
-          </div>
-        </div>
+          </article>
 
-        <aside className="toc" aria-label="Table of contents">
-          <h3>Contents</h3>
-          <ul>
-            {headings.length === 0 ? <li className="muted" style={{ padding:'6px 8px' }}>No headings</li> : null}
-            {headings.map((h) => (
-              <li key={h.id}>
-                <a className={`h${h.level}`} href={`#${h.id}`}>{h.text}</a>
-              </li>
-            ))}
-          </ul>
-        </aside>
+          <aside className="toc" aria-label="Table of contents">
+            <h3>Contents</h3>
+            <ul>
+              {headings.length === 0 ? <li className="muted" style={{ padding:'6px 8px' }}>No headings</li> : null}
+              {headings.map((h) => (
+                <li key={h.id}>
+                  <a className={`h${h.level}`} href={`#${h.id}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        </div>
       </section>
     </>
   );
