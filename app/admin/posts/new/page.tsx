@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import MarkdownEditor from '../../../../components/MarkdownEditor';
 
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
@@ -48,8 +49,8 @@ export default function NewPostPage() {
           <input className="input" value={excerpt} onChange={e=>setExcerpt(e.target.value)} />
         </div>
         <div className="form-row">
-          <label className="label">Content</label>
-          <textarea className="input" rows={10} value={content} onChange={e=>setContent(e.target.value)} required />
+          <label className="label">Content (Markdown)</label>
+          <MarkdownEditor value={content} onChange={setContent} uniqueId="new-post" />
         </div>
         <div className="form-row">
           <label className="label">Tags (comma separated)</label>

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import MarkdownEditor from '../../../../components/MarkdownEditor';
 
 type Post = {
   id: string; title: string; slug: string; excerpt: string | null; content: string;
@@ -82,8 +83,8 @@ export default function EditPostPage() {
           <input className="input" value={post.excerpt || ''} onChange={e=>setPost({ ...post, excerpt: e.target.value })} />
         </div>
         <div className="form-row">
-          <label className="label">Content</label>
-          <textarea className="input" rows={12} value={post.content} onChange={e=>setPost({ ...post, content: e.target.value })} />
+          <label className="label">Content (Markdown)</label>
+          <MarkdownEditor value={post.content} onChange={(v)=>setPost({ ...post!, content: v })} uniqueId={String(id)} />
         </div>
         <div className="form-row">
           <label className="label">Cover Image URL</label>

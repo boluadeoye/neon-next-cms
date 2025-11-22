@@ -1,4 +1,5 @@
 import './globals.css';
+import 'easymde/dist/easymde.min.css';
 
 export const metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME ?? 'My Site',
