@@ -1,0 +1,6 @@
+:root { color-scheme: light dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+main { padding: 24px; }
+h1 { font-size: 28px; margin: 0 0 12px; }
+a { color: #2563eb; text-decoration: underline; }
