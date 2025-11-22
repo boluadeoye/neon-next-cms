@@ -1,31 +1,17 @@
-import { redirect } from 'next/navigation';
-import { getSession } from '../../lib/session';
-
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPage() {
-  const session = await getSession();
-  if (!session) redirect('/login');
-
+export default function AdminDashboard() {
   return (
-    <>
-      <h1>Admin Dashboard</h1>
-      <p>Signed in as {String(session?.email)} ({String(session?.role)})</p>
-
-      <div className="grid" style={{ marginTop: 20 }}>
-        <a className="card" href="/">
-          <h3>Home</h3>
-          <p>Back to the site</p>
-        </a>
-        <a className="card" href="/api/health">
-          <h3>Health</h3>
-          <p>DB status</p>
-        </a>
-        <a className="card" href="/api/auth/logout">
-          <h3>Logout</h3>
-          <p>End session</p>
-        </a>
+    <div className="admin-card">
+      <h1 style={{ marginTop: 0 }}>Admin</h1>
+      <p className="sec-sub" style={{ marginTop: 6 }}>Quick links</p>
+      <div style={{ display:'flex', gap:12, flexWrap:'wrap', marginTop:12 }}>
+        <a className="btn btn-ochre" href="/admin/posts/new">New Post</a>
+        <a className="btn" href="/admin/posts">Manage Posts</a>
+        <a className="btn" href="/admin/pages">Manage Pages</a>
+        <a className="btn" href="/admin/media">Media</a>
+        <a className="btn btn-ghost" href="/admin/settings">Settings</a>
       </div>
-    </>
+    </div>
   );
 }

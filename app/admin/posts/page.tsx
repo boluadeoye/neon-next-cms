@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 
-type Post = { id: string; title: string; slug: string; status: 'draft'|'published'; published_at: string | null; updated_at: string };
+type Post = { id:string; title:string; slug:string; status:'draft'|'published'; published_at:string|null; updated_at:string };
 
 export default function PostsListPage() {
   const [items, setItems] = useState<Post[]>([]);
@@ -32,27 +32,49 @@ export default function PostsListPage() {
   useEffect(() => { load(); }, []);
 
   return (
-    <>
-      <h1>Posts</h1>
-      <p className="help">Create, edit, publish.</p>
-      <div style={{ margin: '12px 0 18px' }}>
-        <a className="btn btn-primary" href="/admin/posts/new">New Post</a>
+    <div className="admin-card">
+      <div className="toolbar">
+        <h1 style={{ margin:0 }}>Posts</h1>
+        <a className="btn btn-ochre" href="/admin/posts/new">New Post</a>
       </div>
-      {loading ? <p>Loading...</p> : null}
-      {msg ? <p className="error">{msg}</p> : null}
-      <div className="grid">
-        {items.map(p => (
-          <div key={p.id} className="card">
-            <h3>{p.title}</h3>
-            <p>/{p.slug}</p>
-            <p>Status: {p.status}{p.published_at ? ` • ${new Date(p.published_at).toLocaleDateString()}` : ''}</p>
-            <div style={{ marginTop: 10, display: 'flex', gap: 8 }}>
-              <a className="btn" href={`/admin/posts/${p.id}`}>Edit</a>
-              <button className="btn" onClick={() => del(p.id)}>Delete</button>
-            </div>
-          </div>
-        ))}
+      {msg ? <p className="sec-sub">{msg}</p> : null}
+      {loading ? <p className="sec-sub">Loading…</p> : null}
+
+      <div className="table-wrap">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Updated</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {items.map(p => (
+            <tr key={p.id}>
+              <td>
+                <div style={{ display:'flex', flexDirection:'column' }}>
+                  <strong>{p.title}</strong>
+                  <span className="sec-sub">/{p.slug}</span>
+                </div>
+              </td>
+              <td>
+                <span className={`badge ${p.status === 'published' ? 'ok' : ''}`}>{p.status}</span>
+              </td>
+              <td>{new Date(p.updated_at).toLocaleDateString()}</td>
+              <td style={{ textAlign:'right' }}>
+                <a className="btn" href={`/admin/posts/${p.id}`} style={{ marginRight:8 }}>Edit</a>
+                <button className="btn btn-ghost" onClick={() => del(p.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+          {items.length === 0 ? (
+            <tr><td colSpan={4} className="sec-sub">No posts yet.</td></tr>
+          ) : null}
+          </tbody>
+        </table>
       </div>
-    </>
+    </div>
   );
 }

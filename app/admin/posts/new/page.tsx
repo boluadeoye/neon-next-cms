@@ -33,8 +33,9 @@ export default function NewPostPage() {
   }
 
   return (
-    <>
-      <h1>New Post</h1>
+    <div className="admin-card">
+      <h1 style={{ marginTop:0 }}>New Post</h1>
+      {msg && <p className="sec-sub">{msg}</p>}
       <form className="form" onSubmit={onSubmit}>
         <div className="form-row">
           <label className="label">Title</label>
@@ -45,16 +46,16 @@ export default function NewPostPage() {
           <input className="input" value={slug} onChange={e=>setSlug(e.target.value)} placeholder="auto from title if blank" />
         </div>
         <div className="form-row">
-          <label className="label">Excerpt (optional)</label>
+          <label className="label">Excerpt</label>
           <input className="input" value={excerpt} onChange={e=>setExcerpt(e.target.value)} />
         </div>
         <div className="form-row">
-          <label className="label">Content (Markdown)</label>
+          <label className="label">Content</label>
           <MarkdownEditor value={content} onChange={setContent} uniqueId="new-post" />
         </div>
         <div className="form-row">
           <label className="label">Tags (comma separated)</label>
-          <input className="input" value={tags} onChange={e=>setTags(e.target.value)} placeholder="news, updates" />
+          <input className="input" value={tags} onChange={e=>setTags(e.target.value)} />
         </div>
         <div className="form-row">
           <label className="label">Status</label>
@@ -63,9 +64,8 @@ export default function NewPostPage() {
             <option value="published">Published</option>
           </select>
         </div>
-        <button className="btn btn-primary" disabled={loading} type="submit">{loading ? '...' : 'Create'}</button>
-        {msg && <p className="error">{msg}</p>}
+        <button className="btn btn-ochre" disabled={loading} type="submit">{loading ? '...' : 'Create post'}</button>
       </form>
-    </>
+    </div>
   );
 }

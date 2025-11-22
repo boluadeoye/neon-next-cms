@@ -31,8 +31,9 @@ export default function NewPagePage() {
   }
 
   return (
-    <>
-      <h1>New Page</h1>
+    <div className="admin-card">
+      <h1 style={{ marginTop:0 }}>New Page</h1>
+      {msg && <p className="sec-sub">{msg}</p>}
       <form className="form" onSubmit={onSubmit}>
         <div className="form-row">
           <label className="label">Title</label>
@@ -43,7 +44,7 @@ export default function NewPagePage() {
           <input className="input" value={slug} onChange={e=>setSlug(e.target.value)} placeholder="auto from title if blank" />
         </div>
         <div className="form-row">
-          <label className="label">Content (Markdown)</label>
+          <label className="label">Content</label>
           <MarkdownEditor value={content} onChange={setContent} uniqueId="new-page" />
         </div>
         <div className="form-row">
@@ -53,9 +54,8 @@ export default function NewPagePage() {
             <option value="published">Published</option>
           </select>
         </div>
-        <button className="btn btn-primary" disabled={loading} type="submit">{loading ? '...' : 'Create'}</button>
-        {msg && <p className="error">{msg}</p>}
+        <button className="btn btn-ochre" disabled={loading} type="submit">{loading ? '...' : 'Create page'}</button>
       </form>
-    </>
+    </div>
   );
 }
