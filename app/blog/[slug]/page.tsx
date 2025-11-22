@@ -13,21 +13,18 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const rows = (await sql`
     SELECT title, excerpt
     FROM posts
-    WHERE slug = ${params.slug} AND status = 'published'
+    WHERE LOWER(slug) = LOWER(${params.slug}) AND status = 'published'
     LIMIT 1
   `) as any[];
   if (rows.length === 0) return { title: 'Not found' };
-  return {
-    title: rows[0].title,
-    description: rows[0].excerpt || undefined,
-  };
+  return { title: rows[0].title, description: rows[0].excerpt || undefined };
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const rows = (await sql`
     SELECT id, title, slug, excerpt, content, cover_image_url, published_at, updated_at
     FROM posts
-    WHERE slug = ${params.slug} AND status = 'published'
+    WHERE LOWER(slug) = LOWER(${params.slug}) AND status = 'published'
     LIMIT 1
   `) as PostFull[];
 

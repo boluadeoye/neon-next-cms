@@ -18,7 +18,7 @@ export default async function BlogIndex() {
       <h1>Blog</h1>
       <div className="grid">
         {rows.map((p) => (
-          <a key={p.id} className="card" href={`/blog/${p.slug}`}>
+          <a key={p.id} className="card" href={`/blog/${encodeURIComponent(p.slug)}`}>
             <h3>{p.title}</h3>
             <p>{p.excerpt || ''}</p>
             <p style={{ marginTop: 8, opacity: .8 }}>
