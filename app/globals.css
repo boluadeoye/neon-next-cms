@@ -207,3 +207,50 @@ a:hover{opacity:.9}
 /* Search */
 .search-wrap { display:flex; gap:8px; align-items:center; margin-top:12px; }
 .search { flex:1; border:1px solid rgb(var(--line)); background:#fff; color:var(--text); border-radius:12px; padding:10px 12px; }
+
+/* ----- Post layout (balanced, two-column on desktop) ----- */
+.post-hero { padding: var(--s12) 0 var(--s6); }
+.post-title { font-family: var(--font-display); font-size: 40px; line-height: 1.2; margin: 0 0 8px; }
+.post-meta  { color: var(--muted); font-size: 14px; }
+
+.post-layout { display: grid; gap: 28px; }
+@media(min-width: 980px){
+  .post-layout { grid-template-columns: minmax(0, 1fr) 320px; align-items: start; }
+}
+
+.actions-wrap { margin: var(--s6) 0; }
+.actions-bar {
+  display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+  border:1px solid rgb(var(--line)); border-radius:14px; padding:10px; background:#fff; box-shadow: var(--shadow);
+}
+.like-pill {
+  display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:999px;
+  border:1px solid rgb(var(--line)); background:#fff; cursor:pointer; user-select:none;
+}
+.like-pill.liked {
+  background: linear-gradient(#fff, #fff) padding-box,
+             linear-gradient(135deg, rgba(194,139,55,.7), rgba(13,35,64,.5)) border-box;
+  border:1px solid transparent; color:var(--navy); box-shadow: var(--shadow);
+}
+.share-chip {
+  display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px;
+  border:1px solid rgb(var(--line)); background:#fff; text-decoration:none; color:inherit;
+}
+
+/* TOC (sticky on desktop) */
+.toc { border:1px solid rgb(var(--line)); border-radius:16px; background:#fff; padding:14px; position:sticky; top:90px; box-shadow: var(--shadow); }
+.toc h3 { margin:0 0 8px; font-size:14px; color:var(--muted); text-transform:uppercase; letter-spacing:.5px }
+.toc ul { list-style:none; padding:0; margin:0; }
+.toc a { display:block; padding:6px 8px; border-radius:8px; color:var(--muted); text-decoration:none; }
+.toc a:hover { background: #f3f4f6; color: var(--text); }
+.toc .h2 { padding-left: 12px; }
+.toc .h3 { padding-left: 22px; }
+
+/* Comments */
+.comments-wrap { margin-top: var(--s12); }
+.comment-card { border:1px solid rgb(var(--line)); border-radius:14px; background:#fff; box-shadow: var(--shadow); padding:12px; }
+.comment-author { font-weight:600; margin:0 0 4px; }
+.comment-time { color:var(--muted); font-size:12px; }
+.comment-body { margin:6px 0 0; white-space:pre-wrap; }
+.comment-form { display:grid; gap:10px; margin-top:12px; }
+.comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }

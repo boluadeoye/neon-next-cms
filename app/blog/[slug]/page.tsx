@@ -6,6 +6,9 @@ import ProgressBar from '../../../components/ProgressBar';
 import TagChip from '../../../components/TagChip';
 import { extractHeadings } from '../../../lib/md';
 import { readingTime } from '../../../lib/reading';
+import LikeButton from '../../../components/LikeButton';
+import ShareBar from '../../../components/ShareBar';
+import Comments from '../../../components/Comments';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -38,61 +41,72 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     ORDER BY t.name ASC
   `) as { name: string; slug: string }[];
 
-  const curDate = (await sql`
-    SELECT COALESCE(published_at, updated_at) AS d FROM posts WHERE id = ${post.id} LIMIT 1
-  `) as { d: string }[];
-  const d = curDate[0]?.d;
+  const dRow = (await sql`SELECT COALESCE(published_at, updated_at) AS d FROM posts WHERE id = ${post.id} LIMIT 1`) as { d: string }[];
+  const d = dRow[0]?.d;
 
   const newer = (await sql`
-    SELECT title, slug
-    FROM posts
+    SELECT title, slug FROM posts
     WHERE status='published' AND COALESCE(published_at, updated_at) > ${d}
     ORDER BY COALESCE(published_at, updated_at) ASC
     LIMIT 1
   `) as { title: string; slug: string }[];
 
   const older = (await sql`
-    SELECT title, slug
-    FROM posts
+    SELECT title, slug FROM posts
     WHERE status='published' AND COALESCE(published_at, updated_at) < ${d}
     ORDER BY COALESCE(published_at, updated_at) DESC
     LIMIT 1
   `) as { title: string; slug: string }[];
 
   const headings = extractHeadings(post.content).filter(h => h.level <= 3);
+  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/blog/${post.slug}`;
 
   return (
     <>
       <ProgressBar />
+
       <section className="post-hero container-narrow">
         <h1 className="post-title">{post.title}</h1>
         <div className="post-meta">
           {date ? new Date(date).toLocaleDateString() : ''} • {rt.minutes} min read
         </div>
         {post.cover_image_url ? (
-          <img src={post.cover_image_url} alt="" style={{ width:'100%', borderRadius: 16, border: '1px solid rgba(2,6,23,.08)' }} />
+          <img src={post.cover_image_url} alt="" style={{ width:'100%', borderRadius: 16, border: '1px solid rgba(2,6,23,.08)', marginTop:12 }} />
         ) : null}
+
+        <div className="actions-wrap">
+          <div className="actions-bar">
+            <LikeButton slug={post.slug} />
+            <ShareBar title={post.title} url={fullUrl} />
+          </div>
+        </div>
       </section>
 
-      <section className="container" style={{ display:'grid', gap:28, gridTemplateColumns:'minmax(0,1fr)' }}>
-        <div className="container-narrow" style={{ maxWidth: 'unset' }}>
-          <MarkdownView content={post.content} />
-          {tagRows?.length ? (
-            <>
-              <hr className="div" />
-              <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                {tagRows.map(t => <TagChip key={t.slug} name={t.name} slug={t.slug} />)}
+      <section className="container post-layout" style={{ paddingBottom:'48px' }}>
+        <div>
+          <div className="container-narrow" style={{ maxWidth:'unset' }}>
+            <MarkdownView content={post.content} />
+
+            {tagRows?.length ? (
+              <>
+                <hr className="div" />
+                <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+                  {tagRows.map(t => <TagChip key={t.slug} name={t.name} slug={t.slug} />)}
+                </div>
+              </>
+            ) : null}
+
+            <hr className="div" />
+            <div style={{ display:'flex', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
+              <div>
+                {newer[0] ? <a className="btn" href={`/blog/${encodeURIComponent(newer[0].slug)}`}>← {newer[0].title}</a> : <span className="muted">No newer post</span>}
               </div>
-            </>
-          ) : null}
-          <hr className="div" />
-          <div style={{ display:'flex', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
-            <div>
-              {newer[0] ? <a className="btn" href={`/blog/${encodeURIComponent(newer[0].slug)}`}>← {newer[0].title}</a> : <span className="muted">No newer post</span>}
+              <div>
+                {older[0] ? <a className="btn" href={`/blog/${encodeURIComponent(older[0].slug)}`}>{older[0].title} →</a> : <span className="muted">No older post</span>}
+              </div>
             </div>
-            <div>
-              {older[0] ? <a className="btn" href={`/blog/${encodeURIComponent(older[0].slug)}`}>{older[0].title} →</a> : <span className="muted">No older post</span>}
-            </div>
+
+            <Comments slug={post.slug} />
           </div>
         </div>
 
