@@ -9,9 +9,7 @@ import NewsSection from '../components/NewsSection';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-type Post = {
-  id:string; title:string; slug:string; excerpt:string|null; cover_image_url:string|null; d:string|null;
-};
+type Post = { id:string; title:string; slug:string; excerpt:string|null; cover_image_url:string|null; d:string|null };
 
 export default async function Home(){
   noStore();
@@ -52,7 +50,14 @@ export default async function Home(){
         <p className="sec-sub">Fresh from the blog</p>
         <div className="grid-auto" style={{ marginTop:12 }}>
           {latest.map(p => (
-            <PostCardCompact key={p.id} title={p.title} slug={p.slug} excerpt={p.excerpt} date={p.d||undefined} />
+            <PostCardCompact
+              key={p.id}
+              title={p.title}
+              slug={p.slug}
+              excerpt={p.excerpt}
+              date={p.d || undefined}
+              cover={p.cover_image_url || undefined}
+            />
           ))}
         </div>
       </section>
