@@ -1,8 +1,11 @@
 import { sql } from '../lib/db';
+import { unstable_noStore as noStore } from 'next/cache';
 
 function val(v:any, fallback=''){ return typeof v === 'string' ? v : (v?.value ?? fallback); }
 
 export default async function HeroCard(){
+  noStore();
+
   const rows = (await sql`
     SELECT key, value FROM settings
     WHERE key = ANY(${[

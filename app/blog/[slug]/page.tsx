@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../../../lib/db';
 import MarkdownView from '../../../components/MarkdownView';
 import ProgressBar from '../../../components/ProgressBar';
@@ -7,6 +8,7 @@ import { extractHeadings } from '../../../lib/md';
 import { readingTime } from '../../../lib/reading';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type PostFull = {
   id: string; title: string; slug: string; excerpt: string | null; content: string;
@@ -14,6 +16,8 @@ type PostFull = {
 };
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+  noStore();
+
   const rows = (await sql`
     SELECT id, title, slug, excerpt, content, cover_image_url, published_at, updated_at
     FROM posts
@@ -26,7 +30,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const date = post.published_at || post.updated_at || null;
   const rt = readingTime(post.content);
 
-  // tags
   const tagRows = (await sql`
     SELECT t.name, t.slug
     FROM tags t
@@ -35,7 +38,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     ORDER BY t.name ASC
   `) as { name: string; slug: string }[];
 
-  // prev/next by date
   const curDate = (await sql`
     SELECT COALESCE(published_at, updated_at) AS d FROM posts WHERE id = ${post.id} LIMIT 1
   `) as { d: string }[];
@@ -72,7 +74,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         ) : null}
       </section>
 
-      <section className="container grid grid-2" style={{ alignItems: 'start', gap: '28px' }}>
+      <section className="container" style={{ display:'grid', gap:28, gridTemplateColumns:'minmax(0,1fr)' }}>
         <div className="container-narrow" style={{ maxWidth: 'unset' }}>
           <MarkdownView content={post.content} />
           {tagRows?.length ? (

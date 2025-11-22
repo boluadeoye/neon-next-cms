@@ -1,11 +1,16 @@
 import { sql } from '../../lib/db';
+import { unstable_noStore as noStore } from 'next/cache';
 import PostCard from '../../components/PostCard';
+import PostCardCompact from '../../components/PostCardCompact';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type Post = { id: string; title: string; slug: string; excerpt: string | null; published_at: string | null; updated_at?: string };
 
 export default async function BlogIndex({ searchParams }: { searchParams?: { tag?: string } }) {
+  noStore();
+
   const tag = searchParams?.tag ? String(searchParams.tag) : null;
 
   const posts = tag
@@ -43,10 +48,10 @@ export default async function BlogIndex({ searchParams }: { searchParams?: { tag
         <p className="muted">{tag ? `Filtering by #${tag}` : 'Latest writing'}</p>
       </section>
 
-      <section className="container grid grid-2" style={{ alignItems:'start' }}>
-        <div className="grid">
+      <section className="container" style={{ display:'grid', gap:24, gridTemplateColumns:'1fr' }}>
+        <div className="grid-auto">
           {posts.map(p => (
-            <PostCard key={p.id} title={p.title} slug={p.slug} excerpt={p.excerpt || ''} date={p.published_at || p.updated_at || null} />
+            <PostCardCompact key={p.id} title={p.title} slug={p.slug} excerpt={p.excerpt || ''} date={p.published_at || p.updated_at || null} />
           ))}
           {posts.length === 0 ? <p className="muted">No posts yet.</p> : null}
         </div>
@@ -60,10 +65,6 @@ export default async function BlogIndex({ searchParams }: { searchParams?: { tag
                 <a key={t.slug} className="tag" href={`/blog?tag=${encodeURIComponent(t.slug)}`}>#{t.name}</a>
               ))}
             </div>
-          </div>
-          <div className="card" style={{ marginTop: 16 }}>
-            <h3 style={{ marginTop:0 }}>Subscribe</h3>
-            <a className="btn" href="/rss.xml">RSS feed</a>
           </div>
         </aside>
       </section>

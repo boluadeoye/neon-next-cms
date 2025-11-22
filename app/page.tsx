@@ -1,9 +1,13 @@
 import { sql } from '../lib/db';
+import { unstable_noStore as noStore } from 'next/cache';
 import HeroCard from '../components/HeroCard';
 import Reveal from '../components/Reveal';
 import PostCardFeatured from '../components/PostCardFeatured';
 import PostCardCompact from '../components/PostCardCompact';
 import ServiceCard from '../components/ServiceCard';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 type Post = {
   id: string; title: string; slug: string; excerpt: string | null; content: string;
@@ -11,7 +15,8 @@ type Post = {
 };
 
 export default async function Home() {
-  // pull posts (published only)
+  noStore(); // prevent SSG/ISR caching
+
   const featured = (await sql`
     SELECT id, title, slug, excerpt, content, cover_image_url, COALESCE(published_at, updated_at) AS d
     FROM posts
@@ -25,15 +30,13 @@ export default async function Home() {
     FROM posts
     WHERE status='published'
     ORDER BY COALESCE(published_at, updated_at) DESC
-    OFFSET 0 LIMIT 9
+    LIMIT 9
   `) as Post[];
 
   return (
     <>
-      {/* Gradient + floating profile card */}
       <HeroCard />
 
-      {/* Featured slider */}
       <section className="section container">
         <div className="sec-head">
           <h2 className="sec-title">Featured</h2>
@@ -48,7 +51,6 @@ export default async function Home() {
         </Reveal>
       </section>
 
-      {/* Latest grid */}
       <section className="section container">
         <div className="sec-head">
           <h2 className="sec-title">Latest</h2>
@@ -63,20 +65,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Services / What I do */}
-      <section className="section container">
-        <div className="sec-head">
-          <h2 className="sec-title">What I Do</h2>
-          <p className="sec-sub">Craft, communicate, and ship</p>
-        </div>
-        <div className="grid-auto">
-          <Reveal><ServiceCard icon="design" title="UI/UX Design" desc="Beautiful interfaces with pragmatic UX." /></Reveal>
-          <Reveal delay={.06}><ServiceCard icon="marketing" title="Product Marketing" desc="Messaging, funnels, and GTM that resonate." /></Reveal>
-          <Reveal delay={.12}><ServiceCard icon="launch" title="Ship & Iterate" desc="Fast MVPs, measurable outcomes." /></Reveal>
-        </div>
-      </section>
-
-      {/* CTA */}
       <section className="section container">
         <Reveal>
           <div className="cta" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
