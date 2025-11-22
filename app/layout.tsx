@@ -1,4 +1,11 @@
-import './globals.css';
+<nav className="nav-links">
+  <a href="/">Home</a>
+  <a href="/admin">Admin</a>
+  <a href="/admin/posts">Posts</a>
+  <a href="/login">Login</a>
+  <a href="/register">Register</a>
+  <a href="/api/health">Health</a>
+</nav>import './globals.css';
 
 export const metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME ?? 'My Site',
