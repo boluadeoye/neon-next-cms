@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 export default function PostCardCompact({
   title, slug, excerpt, date
 }: { title: string; slug: string; excerpt?: string | null; date?: string | null }) {
+  const showExcerpt = excerpt && excerpt !== 'null' && excerpt !== 'undefined';
+  const prettyDate = date ? new Date(date).toLocaleDateString() : '';
   return (
     <motion.a
       href={`/blog/${encodeURIComponent(slug)}`}
@@ -13,8 +15,8 @@ export default function PostCardCompact({
       transition={{ type: 'spring', stiffness: 300, damping: 22 }}
     >
       <h3>{title}</h3>
-      {excerpt ? <p>{excerpt}</p> : null}
-      <p style={{ marginTop: 8, fontSize: 13 }}>{date ? new Date(date).toLocaleDateString() : ''}</p>
+      {showExcerpt ? <p>{excerpt}</p> : null}
+      {prettyDate ? <p style={{ marginTop: 8, fontSize: 13 }}>{prettyDate}</p> : null}
     </motion.a>
   );
 }

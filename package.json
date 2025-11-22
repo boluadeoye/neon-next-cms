@@ -12,6 +12,7 @@
     "@vercel/blob": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "easymde": "^2.20.0",
+    "fast-xml-parser": "^5.3.2",
     "framer-motion": "^12.23.24",
     "jose": "^6.1.2",
     "lucide-react": "^0.554.0",

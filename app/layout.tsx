@@ -1,6 +1,7 @@
 import './globals.css';
 import 'easymde/dist/easymde.min.css';
 import HeaderBrand from '../components/HeaderBrand';
+import HeaderAvatar from '../components/HeaderAvatar';
 import SiteFooter from '../components/SiteFooter';
 
 export const metadata = {
@@ -15,11 +16,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <header className="header">
           <div className="container header-inner">
             <HeaderBrand />
-            <nav className="nav">
-              <a href="/">Home</a>
-              <a href="/blog">Blog</a>
-              {/* /admin remains accessible but hidden from nav */}
-            </nav>
+            <div className="header-right">
+              <nav className="nav">
+                <a href="/">Home</a>
+                <a href="/blog">Blog</a>
+              </nav>
+              <HeaderAvatar />
+            </div>
           </div>
         </header>
         {children}

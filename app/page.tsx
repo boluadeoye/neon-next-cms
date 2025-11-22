@@ -1,10 +1,11 @@
 import { sql } from '../lib/db';
 import { unstable_noStore as noStore } from 'next/cache';
-import HeroCard from '../components/HeroCard';
+import ProfileCard from '../components/ProfileCard';
 import Reveal from '../components/Reveal';
 import PostCardFeatured from '../components/PostCardFeatured';
 import PostCardCompact from '../components/PostCardCompact';
 import ServiceCard from '../components/ServiceCard';
+import NewsSection from '../components/NewsSection';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -15,7 +16,7 @@ type Post = {
 };
 
 export default async function Home() {
-  noStore(); // prevent SSG/ISR caching
+  noStore();
 
   const featured = (await sql`
     SELECT id, title, slug, excerpt, content, cover_image_url, COALESCE(published_at, updated_at) AS d
@@ -35,8 +36,17 @@ export default async function Home() {
 
   return (
     <>
-      <HeroCard />
+      {/* Slim gradient cap (no giant hero image) */}
+      <section className="gradient-hero">
+        <div className="container" style={{ padding:'20px 16px' }}>
+          <div className="brand" style={{ color:'#fff' }}>MEETME</div>
+        </div>
+      </section>
 
+      {/* Profile card with moderate image + bullets */}
+      <ProfileCard />
+
+      {/* Featured slider */}
       <section className="section container">
         <div className="sec-head">
           <h2 className="sec-title">Featured</h2>
@@ -51,6 +61,7 @@ export default async function Home() {
         </Reveal>
       </section>
 
+      {/* Latest grid */}
       <section className="section container">
         <div className="sec-head">
           <h2 className="sec-title">Latest</h2>
@@ -65,6 +76,23 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* News aggregation from multiple sources */}
+      <NewsSection />
+
+      {/* Services */}
+      <section className="section container">
+        <div className="sec-head">
+          <h2 className="sec-title">What I Do</h2>
+          <p className="sec-sub">Craft, communicate, and ship</p>
+        </div>
+        <div className="grid-auto">
+          <Reveal><ServiceCard icon="design" title="UI/UX Design" desc="Beautiful interfaces with pragmatic UX." /></Reveal>
+          <Reveal delay={.06}><ServiceCard icon="marketing" title="Product Marketing" desc="Messaging, funnels, GTM that resonate." /></Reveal>
+          <Reveal delay={.12}><ServiceCard icon="launch" title="Ship & Iterate" desc="Fast MVPs, measurable outcomes." /></Reveal>
+        </div>
+      </section>
+
+      {/* CTA */}
       <section className="section container">
         <Reveal>
           <div className="cta" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
