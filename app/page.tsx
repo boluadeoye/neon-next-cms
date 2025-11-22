@@ -1,27 +1,37 @@
-export default function Home() {
+import { sql } from '../lib/db';
+
+export default async function Home() {
+  const siteName = (await sql`SELECT value FROM settings WHERE key = 'site_name' LIMIT 1`) as any[];
+  const desc = (await sql`SELECT value FROM settings WHERE key = 'site_description' LIMIT 1`) as any[];
+
+  const featured = (await sql`
+    SELECT id, title, slug, excerpt, COALESCE(published_at, updated_at) AS d
+    FROM posts
+    WHERE status='published'
+    ORDER BY COALESCE(published_at, updated_at) DESC
+    LIMIT 3
+  `) as { id: string; title: string; slug: string; excerpt: string | null; d: string | null }[];
+
+  const name = siteName[0]?.value ?? 'My Site';
+  const description = desc[0]?.value ?? 'Writing, ideas, and updates.';
+
   return (
     <>
-      <h1>Neon + Next.js CMS</h1>
-      <p>Starter stack with Vercel (Next.js) + Neon (Postgres). Auth + Admin built-in.</p>
+      <section className="hero container-narrow">
+        <h1>{String(name)}</h1>
+        <p>{String(description)}</p>
+        <a className="btn btn-primary" href="/blog">Read the blog</a>
+      </section>
 
-      <div className="grid">
-        <a className="card" href="/admin">
-          <h3>Admin</h3>
-          <p>Manage content. Requires login.</p>
-        </a>
-        <a className="card" href="/login">
-          <h3>Login</h3>
-          <p>Sign in with your admin account.</p>
-        </a>
-        <a className="card" href="/register">
-          <h3>Register</h3>
-          <p>Only works for the very first admin user.</p>
-        </a>
-        <a className="card" href="/api/health">
-          <h3>Health</h3>
-          <p>Database connectivity check.</p>
-        </a>
-      </div>
+      <section className="container grid" style={{ gap: 16, marginBottom: 48 }}>
+        {featured.map(f => (
+          <a key={f.id} className="card" href={`/blog/${encodeURIComponent(f.slug)}`}>
+            <h3 style={{ margin: 0 }}>{f.title}</h3>
+            {f.excerpt ? <p className="muted" style={{ marginTop: 8 }}>{f.excerpt}</p> : null}
+            {f.d ? <p className="muted" style={{ marginTop: 8, fontSize: 13 }}>{new Date(f.d).toLocaleDateString()}</p> : null}
+          </a>
+        ))}
+      </section>
     </>
   );
 }

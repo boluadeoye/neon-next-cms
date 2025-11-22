@@ -1,33 +1,32 @@
 import './globals.css';
 import 'easymde/dist/easymde.min.css';
 import HeaderBrand from '../components/HeaderBrand';
+import SiteFooter from '../components/SiteFooter';
 
 export const metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME ?? 'My Site',
-  description: 'Next.js + Neon CMS'
+  description: 'Minimal, fast, editorial.'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <a className="skip-link" href="#main">Skip to content</a>
         <header className="navbar">
-          <div className="navbar-inner">
+          <div className="container navbar-inner">
             <HeaderBrand />
-            <nav className="nav-links">
+            <nav className="nav">
               <a href="/">Home</a>
               <a href="/blog">Blog</a>
-              <a href="/admin">Admin</a>
-              <a href="/admin/posts">Posts</a>
-              <a href="/admin/pages">Pages</a>
-              <a href="/admin/media">Media</a>
-              <a href="/login">Login</a>
-              <a href="/register">Register</a>
-              <a href="/api/health">Health</a>
+              {/* Admin route exists but intentionally not linked */}
             </nav>
           </div>
         </header>
-        <main className="container">{children}</main>
+        <main id="main" className="container">{children}</main>
+        <footer className="footer">
+          <div className="container"><SiteFooter /></div>
+        </footer>
       </body>
     </html>
   );
