@@ -44,11 +44,11 @@ export async function POST(req: Request) {
 
     const slug = await ensureUniquePostSlug(explicitSlug || title);
     const authorId = session.sub as string | undefined;
+    const publishedAt = status === 'published' ? new Date().toISOString() : null;
 
     const inserted = (await sql`
       INSERT INTO posts (title, slug, excerpt, content, cover_image_url, status, author_id, published_at)
-      VALUES (${title}, ${slug}, ${excerpt || null}, ${content}, ${cover || null}, ${status}, ${authorId || null},
-              ${status === 'published' ? sql`now()` : null})
+      VALUES (${title}, ${slug}, ${excerpt || null}, ${content}, ${cover || null}, ${status}, ${authorId || null}, ${publishedAt})
       RETURNING id, title, slug, status, published_at
     `) as any[];
 
