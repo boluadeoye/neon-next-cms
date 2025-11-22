@@ -369,3 +369,43 @@ img, video, canvas, iframe { display:block; max-width:100%; height:auto; }
 
 /* Fix overly wide words/links breaking the line box */
 .prose, .article { overflow-wrap: break-word; word-break: break-word; }
+
+/* ===== FINAL SCREEN-FIT CLAMPS (strong overrides) ===== */
+:root { --page-max: 1240px; --content-max: 760px; --gutter: 16px; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+
+/* Universal centered wrappers */
+.container {
+  width: 100%;
+  max-width: min(var(--page-max), 100vw - calc(var(--gutter) * 2));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+.container-narrow,
+.article {
+  width: 100%;
+  max-width: min(var(--content-max), 100vw - calc(var(--gutter) * 2));
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+/* Never clip horizontally anywhere */
+section, header, footer, main, article, aside { overflow-x: visible !important; }
+
+/* Media can never exceed container */
+img, video, canvas, iframe { display: block; max-width: 100%; height: auto; }
+
+/* Title scales but cannot overflow */
+.post-title { font-size: clamp(24px, 6vw, 42px); }
+
+/* Any bars/cards respect container width */
+.actions-bar, .toc, .comment-card { max-width: 100%; }
+
+/* Defensive word wrapping */
+.prose, .article { overflow-wrap: break-word; word-break: break-word; }
