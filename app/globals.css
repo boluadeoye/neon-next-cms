@@ -642,3 +642,86 @@ textarea.input { min-height: 140px; resize: vertical; }
 
 /* Keep everything centered and screen-fit on small screens */
 section, header, footer, main, article, aside { overflow-x: visible !important; }
+
+/* ===== HERO XL + FOREVER ANIMATIONS ===== */
+:root { --hero-max: 980px; }
+
+.hero-xl { width:100%; max-width: min(var(--hero-max), 100vw - 32px); margin-inline:auto; }
+
+/* Large floating card */
+.hero-card-xl{
+  position:relative;
+  background:#fff;
+  border:1px solid rgb(var(--line));
+  border-radius:28px;
+  box-shadow: 0 18px 60px rgba(13,35,64,.12);
+  padding: clamp(18px, 3.5vw, 32px);
+  overflow:hidden;
+  animation: hero-float 12s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+@keyframes hero-float{
+  0%   { transform: translateY(0);   box-shadow: 0 18px 60px rgba(13,35,64,.12); }
+  50%  { transform: translateY(-6px); box-shadow: 0 26px 80px rgba(13,35,64,.16); }
+  100% { transform: translateY(0);   box-shadow: 0 18px 60px rgba(13,35,64,.12); }
+}
+
+/* Watermark (WELCOME) */
+.hero-card-xl .wm{
+  position:absolute; inset:auto 0 22% 0;
+  text-align:center; font-family:var(--font-display);
+  font-weight:800; letter-spacing:.3em;
+  color:#0D2340; opacity:.07;
+  font-size: clamp(56px, 15vw, 160px);
+  pointer-events:none; user-select:none;
+}
+
+/* Social chips (top-right) */
+.soc-strip{ position:absolute; top:12px; right:12px; display:flex; gap:8px; }
+.soc-chip{
+  width:38px; height:38px; border-radius:999px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:#fff; color:var(--navy);
+  border:1px solid rgb(var(--line));
+  box-shadow: 0 6px 18px rgba(13,35,64,.08);
+}
+
+/* Eyebrow + headline */
+.hero-eyebrow{ font-family:var(--font-display); font-size:14px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase }
+.hero-title{ margin:8px 0 10px; font-family:var(--font-display); font-size: clamp(28px, 6.5vw, 48px); line-height:1.15 }
+.hero-title b{ color:var(--ochre) }
+.hero-sub{ color:var(--muted); line-height:1.7; margin:0 0 clamp(10px,2vw,14px) }
+
+/* CTA Panel (inside the hero card) */
+.cta-panel{
+  position:relative;
+  background: var(--navy); color:#fff;
+  border-radius:28px;
+  padding: 14px;
+  margin-top: clamp(12px, 2.5vw, 18px);
+  box-shadow: 0 24px 70px rgba(13,35,64,.28);
+  overflow:hidden;
+}
+.cta-panel::before{
+  content:""; position:absolute; inset:-40% -20% -30% -20%;
+  background:
+    radial-gradient(180px 120px at 20% 30%, rgba(255,255,255,.18), transparent 60%),
+    radial-gradient(220px 140px at 80% 70%, rgba(255,255,255,.10), transparent 70%);
+  filter: blur(2px);
+  animation: cta-glow 18s linear infinite;
+}
+@keyframes cta-glow{
+  0%   { transform: translateX(-8%) translateY(-2%); }
+  50%  { transform: translateX( 8%) translateY( 2%); }
+  100% { transform: translateX(-8%) translateY(-2%); }
+}
+
+/* CTA chips use our chip buttons */
+.cta-row{ display:flex; gap:12px; flex-wrap:wrap; position:relative; z-index:1; }
+
+/* Featured & Latest minor spacing tighten (stays centered) */
+.section .sec-title{ margin-bottom:6px }
+.section .sec-sub{ margin-bottom:10px }
+
+/* Make sure hero section clamps + centers */
+.hero-xl, .hero-card-xl, .cta-panel, .soc-strip{ max-width:100%; }
