@@ -4,12 +4,16 @@ import { sql } from '../../../lib/db';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
+type HealthRow = { now: string; version: string };
+
 export async function GET() {
   try {
-    const rows = await sql<{ now: string; version: string }>`
-      SELECT now() AS now, version() AS version
-    `;
-    const { now, version } = rows[0];
+    // cast now() to text to avoid type ambiguity
+    const rows = (await sql`
+      SELECT now()::text AS now, version() AS version
+    `) as HealthRow[];
+
+    const { now, version } = rows?.[0] ?? { now: '', version: '' };
     return NextResponse.json({ ok: true, now, version });
   } catch (error: any) {
     return NextResponse.json(
