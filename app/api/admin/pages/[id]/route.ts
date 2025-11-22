@@ -49,7 +49,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
     const updates: string[] = [];
     const values: any[] = [];
-    function set(col: string, val: any) { updates.push(`${col} = $${updates.length + 1}`); values.push(val); }
+    const set = (col: string, val: any) => { updates.push(`${col} = $${values.length + 1}`); values.push(val); };
 
     if (title !== undefined) set('title', title);
     if (content !== undefined) set('content', content);
@@ -64,7 +64,8 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     if (updates.length > 0) {
-      const query = `UPDATE pages SET ${updates.join(', ')} WHERE id = $${updates.length + 1} RETURNING id`;
+      const idParamIndex = values.length + 1;
+      const query = `UPDATE pages SET ${updates.join(', ')} WHERE id = $${idParamIndex} RETURNING id`;
       await (sql as any)(query, [...values, id]);
     }
 

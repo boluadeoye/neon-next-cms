@@ -58,15 +58,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     let newSlug = current[0].slug as string;
     if (slugInput !== undefined && slugInput !== current[0].slug) {
       newSlug = await ensureUniquePostSlug(slugInput || (title ?? current[0].title), id);
-    } else if (title !== undefined && !slugInput) {
-      // if title changed but slug not provided, keep existing slug
-      newSlug = current[0].slug;
     }
 
-    // build update dynamically
+    // build update dynamically (only count params for numbering)
     const updates: string[] = [];
     const values: any[] = [];
-    function set(col: string, val: any) { updates.push(`${col} = $${updates.length + 1}`); values.push(val); }
+    const set = (col: string, val: any) => { updates.push(`${col} = $${values.length + 1}`); values.push(val); };
 
     if (title !== undefined) set('title', title);
     if (excerpt !== undefined) set('excerpt', excerpt || null);
@@ -83,9 +80,9 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     }
 
     if (updates.length > 0) {
-      const query = `UPDATE posts SET ${updates.join(', ')} WHERE id = $${updates.length + 1} RETURNING id, title, slug, status, published_at`;
-      const updated = await (sql as any)(query, [...values, id]);
-      // ignore result content here; we refetch below
+      const idParamIndex = values.length + 1; // IMPORTANT: base on values length, not updates length
+      const query = `UPDATE posts SET ${updates.join(', ')} WHERE id = $${idParamIndex} RETURNING id, title, slug, status, published_at`;
+      await (sql as any)(query, [...values, id]);
     }
 
     // handle tags
