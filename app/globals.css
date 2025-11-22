@@ -330,3 +330,42 @@ section, header, footer { overflow-x: clip; }
 
 /* Actions bar and TOC respect container width */
 .actions-bar, .toc { max-width: 100%; }
+
+/* ---- HARD COMPACT CLAMPS (final) ---- */
+/* Containers always center, never exceed screen, always have inner gutters */
+:root { --gutter: 16px; }
+
+.container {
+  max-width: min(1240px, 100% - calc(var(--gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  width: 100%;
+  box-sizing: border-box;
+}
+.container-narrow,
+.article {
+  max-width: min(760px, 100% - calc(var(--gutter) * 2));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Never clip horizontal content; we already clamp widths above */
+section, header, footer { overflow-x: visible; }
+
+/* Media is block‑level and cannot exceed the container */
+img, video, canvas, iframe { display:block; max-width:100%; height:auto; }
+
+/* Titles scale but never overflow */
+.post-title { font-size: clamp(24px, 6vw, 42px); }
+
+/* Bars respect container width */
+.actions-bar, .toc { max-width: 100%; box-sizing:border-box; }
+
+/* Ensure TOC and comments have inner padding that fits */
+.toc { width: 100%; }
+.comments-wrap, .actions-wrap { width: 100%; }
+
+/* Fix overly wide words/links breaking the line box */
+.prose, .article { overflow-wrap: break-word; word-break: break-word; }

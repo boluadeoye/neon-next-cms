@@ -41,31 +41,39 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     ORDER BY t.name ASC
   `) as { name: string; slug: string }[];
 
-  const dRow = (await sql`SELECT COALESCE(published_at, updated_at) AS d FROM posts WHERE id = ${post.id} LIMIT 1`) as { d: string }[];
+  const dRow = (await sql`
+    SELECT COALESCE(published_at, updated_at) AS d
+    FROM posts
+    WHERE id = ${post.id}
+    LIMIT 1
+  `) as { d: string }[];
   const d = dRow[0]?.d;
 
   const newer = (await sql`
-    SELECT title, slug FROM posts
+    SELECT title, slug
+    FROM posts
     WHERE status='published' AND COALESCE(published_at, updated_at) > ${d}
     ORDER BY COALESCE(published_at, updated_at) ASC
     LIMIT 1
   `) as { title: string; slug: string }[];
 
   const older = (await sql`
-    SELECT title, slug FROM posts
+    SELECT title, slug
+    FROM posts
     WHERE status='published' AND COALESCE(published_at, updated_at) < ${d}
     ORDER BY COALESCE(published_at, updated_at) DESC
     LIMIT 1
   `) as { title: string; slug: string }[];
 
   const headings = extractHeadings(post.content).filter(h => h.level <= 3);
-  const fullUrl = `${process.env.NEXT_PUBLIC_SITE_URL || ''}/blog/${post.slug}`;
+  const base = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || '';
+  const fullUrl = `${base}/blog/${post.slug}`;
 
   return (
     <>
       <ProgressBar />
 
-      {/* Compact hero */}
+      {/* Compact hero (centered) */}
       <section className="post-hero">
         <div className="article">
           <h1 className="post-title">{post.title}</h1>
@@ -88,7 +96,7 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
         </div>
       </section>
 
-      {/* Compact grid: article + TOC */}
+      {/* Content + TOC (centered main column) */}
       <section className="container">
         <div className="post-grid">
           <article className="article">
