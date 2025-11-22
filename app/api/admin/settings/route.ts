@@ -23,9 +23,10 @@ export async function PUT(req: Request){
     const body = await req.json();
     const allowed = [
       'site_name','site_description','site_og_image','site_twitter',
-      'hero_name','hero_title','hero_bio','hero_avatar_url',
+      'hero_name','hero_title','hero_bio','hero_avatar_url','hero_portrait_url',
       'hero_birthday','hero_phone','hero_email','hero_location',
-      'hero_social_twitter','hero_social_linkedin','hero_social_github'
+      'hero_social_twitter','hero_social_linkedin','hero_social_github',
+      'hero_bullets','news_feeds'
     ];
     for(const key of allowed){
       if(key in body){

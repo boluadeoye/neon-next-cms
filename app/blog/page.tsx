@@ -1,72 +1,73 @@
-import { sql } from '../../lib/db';
 import { unstable_noStore as noStore } from 'next/cache';
-import PostCard from '../../components/PostCard';
-import PostCardCompact from '../../components/PostCardCompact';
+import { sql } from '../../lib/db';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-type Post = { id: string; title: string; slug: string; excerpt: string | null; published_at: string | null; updated_at?: string };
+type Post = { id:string; title:string; slug:string; excerpt:string|null; published_at:string|null; updated_at?:string|null };
 
-export default async function BlogIndex({ searchParams }: { searchParams?: { tag?: string } }) {
+function mapToCat(slug:string){
+  const s = slug.toLowerCase();
+  if (s.includes('life')) return 'Life';
+  if (s.includes('culture')) return 'Culture';
+  if (s.includes('news')) return 'News';
+  return 'Essays';
+}
+
+export default async function BlogIndex({ searchParams }:{ searchParams?: { cat?: string } }){
   noStore();
+  const cat = searchParams?.cat ? String(searchParams.cat) : null;
 
-  const tag = searchParams?.tag ? String(searchParams.tag) : null;
-
-  const posts = tag
+  const posts = cat
     ? (await sql`
         SELECT p.id, p.title, p.slug, p.excerpt, p.published_at, p.updated_at
         FROM posts p
-        JOIN post_tags pt ON pt.post_id = p.id
-        JOIN tags t ON t.id = pt.tag_id
-        WHERE p.status = 'published' AND LOWER(t.slug) = LOWER(${tag})
+        LEFT JOIN post_tags pt ON pt.post_id = p.id
+        LEFT JOIN tags t ON t.id = pt.tag_id
+        WHERE p.status='published' AND (
+          (${cat} = 'Essays' AND (t.slug IS NULL OR (LOWER(t.slug) NOT LIKE '%life%' AND LOWER(t.slug) NOT LIKE '%culture%' AND LOWER(t.slug) NOT LIKE '%news%')))
+          OR (${cat} <> 'Essays' AND LOWER(t.slug) LIKE ${'%' + cat.toLowerCase() + '%'})
+        )
+        GROUP BY p.id
         ORDER BY COALESCE(p.published_at, p.updated_at) DESC
-        LIMIT 40
+        LIMIT 48
       `) as Post[]
     : (await sql`
         SELECT id, title, slug, excerpt, published_at, updated_at
         FROM posts
-        WHERE status = 'published'
+        WHERE status='published'
         ORDER BY COALESCE(published_at, updated_at) DESC
-        LIMIT 40
+        LIMIT 48
       `) as Post[];
 
-  const topTags = (await sql`
-    SELECT t.name, t.slug, COUNT(*)::int AS count
-    FROM tags t
-    JOIN post_tags pt ON pt.tag_id = t.id
-    JOIN posts p ON p.id = pt.post_id AND p.status='published'
-    GROUP BY t.id, t.name, t.slug
-    ORDER BY count DESC, t.name ASC
-    LIMIT 12
-  `) as { name: string; slug: string; count: number }[];
+  const chips = ['Essays','Life','Culture','News'];
 
   return (
     <>
-      <section className="hero container">
-        <h1>Blog</h1>
-        <p className="muted">{tag ? `Filtering by #${tag}` : 'Latest writing'}</p>
+      <section className="section container">
+        <h1 className="sec-title">Blog</h1>
+        <div style={{ display:'flex', gap:10, flexWrap:'wrap', marginTop:12 }}>
+          {chips.map(c => (
+            <a key={c} className="chip" href={c==='Essays' ? '/blog' : `/blog?cat=${encodeURIComponent(c)}`} style={{ background: cat===c ? '#fff' : '#fff' }}>
+              {c}
+            </a>
+          ))}
+        </div>
       </section>
 
-      <section className="container" style={{ display:'grid', gap:24, gridTemplateColumns:'1fr' }}>
+      <section className="container" style={{ paddingBottom: '48px' }}>
         <div className="grid-auto">
           {posts.map(p => (
-            <PostCardCompact key={p.id} title={p.title} slug={p.slug} excerpt={p.excerpt || ''} date={p.published_at || p.updated_at || null} />
+            <a key={p.id} href={`/blog/${p.slug}`} className="compact">
+              <h3 style={{ margin:0 }}>{p.title}</h3>
+              {p.excerpt ? <p style={{ marginTop:6 }}>{p.excerpt}</p> : null}
+              <p style={{ marginTop:8, fontSize:13, color:'var(--muted)' }}>
+                {new Date(p.published_at || p.updated_at || '').toLocaleDateString()} • {mapToCat('' /* fallback no tag here */)}
+              </p>
+            </a>
           ))}
-          {posts.length === 0 ? <p className="muted">No posts yet.</p> : null}
+          {posts.length===0 ? <p className="sec-sub">No posts yet.</p> : null}
         </div>
-
-        <aside style={{ position:'sticky', top: 84 }}>
-          <div className="card">
-            <h3 style={{ marginTop:0 }}>Tags</h3>
-            <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginTop:8 }}>
-              <a className="tag" href="/blog">All</a>
-              {topTags.map(t => (
-                <a key={t.slug} className="tag" href={`/blog?tag=${encodeURIComponent(t.slug)}`}>#{t.name}</a>
-              ))}
-            </div>
-          </div>
-        </aside>
       </section>
     </>
   );
