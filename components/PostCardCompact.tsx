@@ -1,0 +1,20 @@
+'use client';
+import { motion } from 'framer-motion';
+
+export default function PostCardCompact({
+  title, slug, excerpt, date
+}: { title: string; slug: string; excerpt?: string | null; date?: string | null }) {
+  return (
+    <motion.a
+      href={`/blog/${encodeURIComponent(slug)}`}
+      className="compact"
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: .98 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+    >
+      <h3>{title}</h3>
+      {excerpt ? <p>{excerpt}</p> : null}
+      <p style={{ marginTop: 8, fontSize: 13 }}>{date ? new Date(date).toLocaleDateString() : ''}</p>
+    </motion.a>
+  );
+}
