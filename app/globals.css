@@ -733,3 +733,18 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
 .typing-cursor{ display:inline-block; width:1px; height:1em; background: currentColor; margin-left:2px; vertical-align:-.15em; animation: blink 1.1s steps(1,end) infinite; }
 @keyframes blink{ 0%,50%{opacity:1} 50.1%,100%{opacity:0} }
 .gold{ color: var(--ochre); font-weight: 700; }
+
+/* HERO width tweak: ~-15% and centered */
+:root { --hero-max: 720px; } /* was 830/980; now tighter and centered */
+
+/* tiny padding tune so card breathes at smaller width */
+.hero-card-xl{ padding: clamp(16px, 3vw, 28px); }
+
+/* keep watermark visible and elegant */
+.hero-card-xl .wm{
+  position:absolute; inset:auto 0 22% 0;
+  text-align:center; font-family:var(--font-display); font-weight:800;
+  letter-spacing:.32em; color:#0D2340; opacity:.075;
+  font-size: clamp(56px, 14vw, 150px);
+  pointer-events:none; user-select:none;
+}

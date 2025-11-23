@@ -1,5 +1,4 @@
 import { sql } from '../lib/db';
-import AboutWriterCardClient from './AboutWriterCardClient';
 
 export default async function AboutWriterCard(){
   const rows = (await sql`
@@ -19,5 +18,16 @@ export default async function AboutWriterCard(){
     'Simple words, strong ideas, careful research',
     'Open to collaborations and speaking'
   ];
-  return <AboutWriterCardClient name={name} role={role} bullets={bullets} />;
+
+  return (
+    <section className="section container">
+      <div className="about-card" style={{ maxWidth: 'min(var(--hero-max), 100vw - 32px)', marginInline: 'auto' }}>
+        <h2 className="sec-title" style={{ marginTop: 0 }}>{name}</h2>
+        <p className="sec-sub" style={{ marginTop: 6 }}>{role}</p>
+        <div className="about-bullets" style={{ marginTop:12 }}>
+          {bullets.slice(0,4).map((b,i)=> <span key={i} className="chip">{b}</span>)}
+        </div>
+      </div>
+    </section>
+  );
 }

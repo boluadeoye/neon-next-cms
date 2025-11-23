@@ -16,11 +16,10 @@ export default async function HeroEditorial(){
   const subcopy = val(map.hero_bio, 'I write clear, compelling stories that move people to action.');
   const links = {
     portfolio: '/portfolio',
-    resume: '/resume',
     blog: '/blog',
     x: val(map.hero_social_twitter, '') || '',
     linkedin: val(map.hero_social_linkedin, '') || '',
-    instagram: val(map.hero_social_github, '') || '' // reuse if desired
+    instagram: val(map.hero_social_github, '') || ''
   };
 
   return <HeroEditorialClient name={name} subcopy={subcopy} links={links} />;
