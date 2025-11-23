@@ -2,8 +2,8 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../lib/db';
 import HomeMasthead from '../components/HomeMasthead';
 import PostCardFeatured from '../components/PostCardFeatured';
-import PostCardCompact from '../components/PostCardCompact';
 import SectionReveal from '../components/SectionReveal';
+import NewsMiniList from '../components/NewsMiniList';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -48,7 +48,7 @@ export default async function Home(){
             </SectionReveal>
 
             <SectionReveal delay={.1}>
-              <h2 className="sec-title" style={{ marginTop: 20 }}>Latest</h2>
+              <h2 className="sec-title" style={{ marginTop: 22 }}>Latest</h2>
               <p className="sec-sub">Fresh from the blog</p>
               <div style={{ display:'grid', gap:16 }}>
                 {latest.map(p => (
@@ -93,6 +93,12 @@ export default async function Home(){
                   {recent.length === 0 ? <p className="sec-sub">No posts yet.</p> : null}
                 </div>
               </div>
+            </SectionReveal>
+
+            <SectionReveal delay={.12}>
+              {/* Updates / News section (compact) */}
+              {/* Set feeds in Admin → Settings → News Feeds */}
+              <NewsMiniList />
             </SectionReveal>
           </aside>
         </div>

@@ -1122,3 +1122,101 @@ h1, h2, h3,
 /* Soft section titles spacing */
 .section .sec-title{ margin-bottom: 6px }
 .section .sec-sub { margin-bottom: 12px }
+
+/* ===== Template-alike masthead (final) ===== */
+.masthead {
+  position: relative;
+  height: clamp(300px, 42vw, 440px);
+  width: 100%;
+  overflow: hidden;
+  background: #111;
+}
+.mast-bg {
+  position:absolute; inset:0;
+  background-size: cover; background-position: center;
+  filter: grayscale(.15) contrast(1.05) brightness(.78);
+  transform: scale(1.04);
+  z-index: 1;
+}
+.mast-overlay {
+  position:absolute; inset:0; z-index: 2;
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.38) 45%, rgba(0,0,0,.55));
+}
+.mast-inner {
+  position: relative; z-index: 3; height:100%;
+  display:flex; align-items:center; justify-content:center; text-align:center; color:#fff;
+}
+.mast-name {
+  font-family: var(--font-display), serif;
+  font-size: clamp(32px, 7vw, 80px);
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* Avatar + intro block under masthead (always above cover) */
+.mast-intro {
+  position: relative;
+  z-index: 5;              /* stays above hero */
+  text-align:center;
+  margin-top: -70px;       /* overlap the hero bottom edge */
+  margin-bottom: 24px;
+}
+.avatar-wrap {
+  display:inline-block;
+  border-radius: 999px;
+  padding: 6px; background: #fff;
+  box-shadow: 0 18px 40px rgba(13,35,64,.25);
+}
+.avatar-ring {
+  width: 130px; height: 130px; border-radius: 999px; object-fit: cover; display:block;
+}
+.mast-bio { color: var(--muted); margin: 12px 0 4px; }
+.mast-email a { color:#0D2340; text-decoration: none; }
+.mast-social { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+.mast-social a {
+  width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; border-radius:999px;
+  background:#fff; color:#0D2340; border:1px solid rgb(var(--line));
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.mast-social a:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(13,35,64,.16); }
+.mast-social svg { width:18px; height:18px; }
+
+/* Home grid (feed + sidebar) */
+.home-grid { display:grid; gap: 22px; }
+@media(min-width:1040px){ .home-grid { grid-template-columns: 2.2fr 1fr; } }
+
+/* Post card large */
+.post-card{ background:#fff; border:1px solid rgb(var(--line)); border-radius:16px; overflow:hidden; box-shadow: var(--shadow); }
+.post-card img{ width:100%; aspect-ratio: 16/9; object-fit: cover; display:block; }
+.post-body{ padding:14px; }
+.post-title a{ color:var(--text); text-decoration:none; }
+.post-title a:hover{ opacity:.9; }
+.post-meta{ color:var(--muted); font-size:13px; margin-top: 6px; }
+
+/* Sidebar widgets */
+.widget{
+  background:#fff; border:1px solid rgb(var(--line)); border-radius:16px; padding:14px; box-shadow: var(--shadow);
+}
+.widget h3{ margin:0 0 8px; font-family: var(--font-display), serif; }
+.search-wide{ display:flex; gap:8px; }
+.search-wide input{
+  flex:1; border:1px solid rgb(var(--line)); background:#fff; color:var(--text); border-radius:12px; padding:10px 12px;
+}
+.recent-list{ display:grid; gap:10px; }
+.recent-item{ display:grid; grid-template-columns: 72px 1fr; gap:10px; align-items:center; }
+.recent-thumb{ width:72px; height:56px; border-radius:10px; object-fit:cover; background:#eef2f7; border:1px solid rgb(var(--line)); }
+.recent-item a{ text-decoration:none; color:var(--text); }
+.recent-item a:hover{ opacity:.9; }
+
+/* Updates (news) compact list */
+.updates-list{ display:grid; gap:10px; }
+.update-item{ display:grid; grid-template-columns: 64px 1fr; gap:10px; align-items:center; }
+.update-thumb{ width:64px; height:48px; border-radius:8px; object-fit:cover; background:#eef2f7; border:1px solid rgb(var(--line)); }
+.update-title{ margin:0 0 4px; font-size:14.5px; line-height:1.35; }
+.update-meta{ font-size:12px; color:var(--muted); }
+
+/* Soft section titles spacing */
+.section .sec-title{ margin-bottom: 6px }
+.section .sec-sub { margin-bottom: 12px }

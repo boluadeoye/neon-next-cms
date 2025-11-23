@@ -21,10 +21,11 @@ export default async function HomeMasthead(){
 
   const x   = val(map.hero_social_twitter, '') || '';
   const li  = val(map.hero_social_linkedin, '') || '';
-  const ig  = val(map.hero_social_github, '') || ''; // repurposed field if you want Instagram.
+  const ig  = val(map.hero_social_github, '') || ''; // repurpose if needed
 
   return (
     <>
+      {/* Dark cover masthead */}
       <div className="masthead">
         <div className="mast-bg" style={{ backgroundImage: `url(${cover})` }} />
         <div className="mast-overlay" />
@@ -33,6 +34,7 @@ export default async function HomeMasthead(){
         </div>
       </div>
 
+      {/* Overlapping avatar & intro (sits above hero due to z-index) */}
       <div className="mast-intro">
         <span className="avatar-wrap">
           <img className="avatar-ring" src={avatar} alt="" />
