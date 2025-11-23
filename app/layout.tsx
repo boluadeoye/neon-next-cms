@@ -4,11 +4,11 @@ import HeaderBrand from '../components/HeaderBrand';
 import HeaderAvatar from '../components/HeaderAvatar';
 import SiteFooter from '../components/SiteFooter';
 import NavLinks from '../components/NavLinks';
-import { Bodoni_Moda, Lato } from 'next/font/google';
+import { Merriweather, Lato } from 'next/font/google';
 
-const display = Bodoni_Moda({
+const display = Merriweather({
   subsets: ['latin'],
-  weight: ['400','500','600','700','800','900'],
+  weight: ['300','400','700','900'],
   variable: '--font-display',
   display: 'swap'
 });

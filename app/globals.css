@@ -876,3 +876,23 @@ h1, h2, h3,
 
 /* Body copy—slightly taller line height for Lato */
 .prose { line-height: 1.7; }
+
+/* ===== Headings → Merriweather; Body/UI → Lato ===== */
+body, button, input, select, textarea,
+.nav, .nav-chip, .chip, .chip-shine, .btn, .tag, .pill,
+.table, .comment-card, .actions-bar, .about-card, .blog-hero {
+  font-family: var(--font-sans), Lato, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* All headings and title elements */
+h1, h2, h3,
+.sec-title, .hero-title, .brand, .blog-hero h1 {
+  font-family: var(--font-display), Merriweather, serif;
+  font-weight: 700;           /* clean, sturdy */
+  letter-spacing: 0;          /* remove flourishy spacing */
+}
+
+/* Fine-tune sizes for Merriweather */
+.hero-title { font-size: clamp(28px, 6vw, 44px); line-height: 1.15; }
+.sec-title  { font-size: clamp(24px, 4.2vw, 30px); line-height: 1.2; }
+.hero-eyebrow{ font-family: var(--font-display), Merriweather, serif; letter-spacing: .08em; }
