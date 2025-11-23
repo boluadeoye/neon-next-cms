@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import TypingText from './TypingText';
 
 export default function HeroEditorialClient({
   name, subcopy, links
@@ -25,9 +26,33 @@ export default function HeroEditorialClient({
         <div className="wm">WELCOME</div>
 
         <div>
-          <div className="hero-eyebrow">HELLO</div>
-          <h1 className="hero-title">I’m <b>{name}</b></h1>
-          <p className="hero-sub">{subcopy}</p>
+          <TypingText
+            as="div"
+            className="hero-eyebrow"
+            text="HELLO"
+            speed={24}
+            delay={200}
+            loop
+          />
+          <TypingText
+            as="h1"
+            className="hero-title"
+            segments={[
+              { text: "I’m " },
+              { text: name, className: 'gold' }
+            ]}
+            speed={26}
+            delay={500}
+            loop
+          />
+          <TypingText
+            as="p"
+            className="hero-sub"
+            text={subcopy}
+            speed={18}
+            delay={950}
+            loop
+          />
 
           <div className="cta-panel">
             <div className="cta-row">

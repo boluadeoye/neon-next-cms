@@ -725,3 +725,11 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
 
 /* Make sure hero section clamps + centers */
 .hero-xl, .hero-card-xl, .cta-panel, .soc-strip{ max-width:100%; }
+
+/* === HERO width tweak: -15% and still centered === */
+:root { --hero-max: 830px; } /* was ~980px; now ~15% smaller */
+
+/* Typing cursor + highlight helpers */
+.typing-cursor{ display:inline-block; width:1px; height:1em; background: currentColor; margin-left:2px; vertical-align:-.15em; animation: blink 1.1s steps(1,end) infinite; }
+@keyframes blink{ 0%,50%{opacity:1} 50.1%,100%{opacity:0} }
+.gold{ color: var(--ochre); font-weight: 700; }
