@@ -748,3 +748,22 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
   font-size: clamp(56px, 14vw, 150px);
   pointer-events:none; user-select:none;
 }
+
+/* === Hero card size & position (smaller + nudged down) === */
+:root { --hero-max: 640px; }  /* ~15% smaller than before */
+
+.hero-xl{
+  width:100%;
+  max-width: min(var(--hero-max), 100vw - 32px);
+  margin-inline:auto;
+  margin-top: clamp(10px, 3vw, 24px); /* nudge down under header */
+}
+
+/* Keep watermark elegant and visible */
+.hero-card-xl .wm{
+  position:absolute; inset:auto 0 22% 0;
+  text-align:center; font-family:var(--font-display); font-weight:800;
+  letter-spacing:.32em; color:#0D2340; opacity:.075;
+  font-size: clamp(56px, 14vw, 150px);
+  pointer-events:none; user-select:none;
+}
