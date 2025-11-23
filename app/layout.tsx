@@ -4,10 +4,20 @@ import HeaderBrand from '../components/HeaderBrand';
 import HeaderAvatar from '../components/HeaderAvatar';
 import SiteFooter from '../components/SiteFooter';
 import NavLinks from '../components/NavLinks';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google';
 
-const display = Playfair_Display({ subsets: ['latin'], weight: ['400','600','700','800'], variable: '--font-display', display: 'swap' });
-const inter = Inter({ subsets: ['latin'], weight: ['400','500','600','700'], variable: '--font-sans', display: 'swap' });
+const display = Fraunces({
+  subsets: ['latin'],
+  weight: ['400','500','600','700','800','900'],
+  variable: '--font-display',
+  display: 'swap'
+});
+const sans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400','500','600','700','800'],
+  variable: '--font-sans',
+  display: 'swap'
+});
 
 export const metadata = {
   title: process.env.NEXT_PUBLIC_SITE_NAME ?? 'My Site',
@@ -16,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${inter.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body style={{ fontFamily: 'var(--font-sans)' }}>
         <header className="header">
           <div className="container header-inner">

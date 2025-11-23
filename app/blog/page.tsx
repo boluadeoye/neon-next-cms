@@ -1,6 +1,7 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../../lib/db';
 import PostCardCompact from '../../components/PostCardCompact';
+import SectionReveal from '../../components/SectionReveal';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -33,7 +34,6 @@ export default async function BlogIndex({ searchParams }: { searchParams?: { cat
     LIMIT 120
   `) as any[];
 
-  // Filter in memory (simple and safe for <=120 posts)
   let posts: Post[] = rows.map(r => ({ ...r, tags: r.tags as string[] | null }));
   if (cat) {
     if (cat === 'Essays') posts = posts.filter(p => !['Life','Culture','News'].includes(pickCategory(p.tags)));
@@ -48,44 +48,46 @@ export default async function BlogIndex({ searchParams }: { searchParams?: { cat
 
   return (
     <>
-      <section className="section container">
-        <div className="blog-hero">
-          <h1>Blog</h1>
-          <p>Essays, notes, and stories.</p>
-
-          <div className="cat-bar">
-            {chips.map(c => (
-              <a key={c}
-                 className={`cat-chip ${cat===c || (!cat && c==='Essays') ? 'active' : ''}`}
-                 href={c==='Essays' ? '/blog' : `/blog?cat=${encodeURIComponent(c)}`}>
-                {c}
-              </a>
-            ))}
+      <SectionReveal>
+        <section className="section container">
+          <div className="blog-hero">
+            <h1>Blog</h1>
+            <p>Essays, notes, and stories.</p>
+            <div className="cat-bar">
+              {chips.map(c => (
+                <a key={c}
+                   className={`cat-chip ${cat===c || (!cat && c==='Essays') ? 'active' : ''}`}
+                   href={c==='Essays' ? '/blog' : `/blog?cat=${encodeURIComponent(c)}`}>
+                  {c}
+                </a>
+              ))}
+            </div>
+            <form className="search-wrap" action="/blog" method="get">
+              <input className="search" name="q" placeholder="Search posts…" defaultValue={q} />
+              {cat && <input type="hidden" name="cat" value={cat} />}
+              <button className="btn btn-ghost" type="submit">Search</button>
+            </form>
           </div>
+        </section>
+      </SectionReveal>
 
-          <form className="search-wrap" action="/blog" method="get">
-            <input className="search" name="q" placeholder="Search posts…" defaultValue={q} />
-            {cat && <input type="hidden" name="cat" value={cat} />}
-            <button className="btn btn-ghost" type="submit">Search</button>
-          </form>
-        </div>
-      </section>
-
-      <section className="section container">
-        <div className="grid-auto">
-          {posts.map(p => (
-            <PostCardCompact
-              key={p.id}
-              title={p.title}
-              slug={p.slug}
-              excerpt={p.excerpt}
-              date={p.d || undefined}
-              cover={p.cover_image_url || undefined}
-            />
-          ))}
-          {posts.length === 0 ? <p className="sec-sub">No posts match your filters.</p> : null}
-        </div>
-      </section>
+      <SectionReveal delay={.1}>
+        <section className="section container">
+          <div className="grid-auto">
+            {posts.map(p => (
+              <PostCardCompact
+                key={p.id}
+                title={p.title}
+                slug={p.slug}
+                excerpt={p.excerpt}
+                date={p.d || undefined}
+                cover={p.cover_image_url || undefined}
+              />
+            ))}
+            {posts.length === 0 ? <p className="sec-sub">No posts match your filters.</p> : null}
+          </div>
+        </section>
+      </SectionReveal>
     </>
   );
 }
