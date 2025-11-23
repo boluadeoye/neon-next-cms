@@ -971,3 +971,63 @@ h1, h2, h3,
 
 /* keep comfortable space above footer */
 .post-bottom-pad{ padding-bottom: 96px; }
+
+/* === Filled tag chips + prev/next chips === */
+.tag-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 12px; border-radius:999px; text-decoration:none;
+  background: var(--ochre); color:#fff;
+  border:1px solid #a97a30;
+  box-shadow: 0 8px 20px rgba(194,139,55,.26);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.tag-chip:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(194,139,55,.32); filter:saturate(1.06); }
+
+.prevnext{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top: 12px; }
+
+.chip-link{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+  background: var(--ochre); color:#fff;
+  border:1px solid #a97a30;
+  box-shadow: 0 8px 20px rgba(194,139,55,.26);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.chip-link:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(194,139,55,.32); filter:saturate(1.06); }
+.chip-link svg{ width:14px; height:14px; display:block; color:#fff; }
+
+/* Disabled look */
+.chip-link.disabled{ opacity:.45; pointer-events:none; }
+
+/* Extra breathing room above footer (in case it still feels tight) */
+.post-bottom-pad{ padding-bottom: 120px; }
+
+/* === Filled tag chips + prev/next chips === */
+.tag-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 12px; border-radius:999px; text-decoration:none;
+  background: var(--ochre); color:#fff;
+  border:1px solid #a97a30;
+  box-shadow: 0 8px 20px rgba(194,139,55,.26);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.tag-chip:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(194,139,55,.32); filter:saturate(1.06); }
+
+.prevnext{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top: 12px; }
+
+.chip-link{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+  background: var(--ochre); color:#fff;
+  border:1px solid #a97a30;
+  box-shadow: 0 8px 20px rgba(194,139,55,.26);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.chip-link:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(194,139,55,.32); filter:saturate(1.06); }
+.chip-link svg{ width:14px; height:14px; display:block; color:#fff; }
+
+/* Disabled look */
+.chip-link.disabled{ opacity:.45; pointer-events:none; }
+
+/* Extra breathing room above footer (in case it still feels tight) */
+.post-bottom-pad{ padding-bottom: 120px; }

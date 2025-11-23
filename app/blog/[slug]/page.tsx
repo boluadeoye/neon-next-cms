@@ -7,6 +7,7 @@ import { extractHeadings } from '../../../lib/md';
 import { readingTime } from '../../../lib/reading';
 import LikeButton from '../../../components/LikeButton';
 import ShareBar from '../../../components/ShareBar';
+import Comments from '../../../components/Comments';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -134,6 +135,10 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                 )}
               </div>
             </div>
+
+            {/* Comments restored */}
+            <hr className="div" />
+            <Comments slug={post.slug} />
           </article>
 
           {/* TOC */}
