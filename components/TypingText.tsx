@@ -8,11 +8,11 @@ type Props = {
   speed?: number;      // ms per char
   delay?: number;      // ms before start
   className?: string;
-  cursor?: boolean;    // show blink cursor
+  cursor?: boolean;    // if true, shows a tiny bar at the end
 };
 
 export default function TypingText({
-  text, segments, as='span', speed=22, delay=0, className, cursor=true
+  text, segments, as='span', speed=22, delay=0, className, cursor=false
 }: Props){
   const segs = segments ?? [{ text: text || '' }];
   const full = segs.map(s => s.text).join('');
@@ -30,7 +30,6 @@ export default function TypingText({
     return () => clearTimeout(t);
   }, [count, delay, speed, full.length]);
 
-  // Assemble typed output across segments
   let left = count;
   const rendered = segs.map((s, i) => {
     const take = Math.max(0, Math.min(left, s.text.length)); left -= take;
