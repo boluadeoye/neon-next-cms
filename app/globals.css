@@ -832,3 +832,24 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
 
 .search-wrap { display:flex; gap:8px; align-items:center; margin-top:12px; }
 .search { flex:1; border:1px solid rgba(255,255,255,.35); background:#fff; color:var(--text); border-radius:12px; padding:10px 12px; }
+
+/* ===== Global typography mapping (Cormorant Garamond + Sora) ===== */
+body, button, input, select, textarea, .btn, .chip, .tag, .pill, .nav, .nav-chip, .chip-shine {
+  font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+h1, h2, h3, .sec-title, .hero-title, .brand, .blog-hero h1 {
+  font-family: var(--font-display), "Cormorant Garamond", serif;
+  letter-spacing: -0.01em;
+}
+
+/* Fine tuning sizes (keeps your existing scales but benefits from Cormorant) */
+.hero-title { font-size: clamp(28px, 6.2vw, 46px); }
+.sec-title { font-size: clamp(24px, 4.4vw, 30px); }
+
+/* Inputs and labels use Sora for clarity */
+.label, .input, .search, .comment-card, .actions-bar { font-family: var(--font-sans), sans-serif; }
+
+/* Optional: slightly raise line-height for body copy with Sora */
+.prose { line-height: 1.65; }

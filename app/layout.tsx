@@ -4,15 +4,15 @@ import HeaderBrand from '../components/HeaderBrand';
 import HeaderAvatar from '../components/HeaderAvatar';
 import SiteFooter from '../components/SiteFooter';
 import NavLinks from '../components/NavLinks';
-import { Fraunces, Plus_Jakarta_Sans } from 'next/font/google';
+import { Cormorant_Garamond, Sora } from 'next/font/google';
 
-const display = Fraunces({
+const display = Cormorant_Garamond({
   subsets: ['latin'],
-  weight: ['400','500','600','700','800','900'],
+  weight: ['400','500','600','700'],
   variable: '--font-display',
   display: 'swap'
 });
-const sans = Plus_Jakarta_Sans({
+const sans = Sora({
   subsets: ['latin'],
   weight: ['400','500','600','700','800'],
   variable: '--font-sans',
