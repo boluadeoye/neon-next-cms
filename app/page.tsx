@@ -1,10 +1,8 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../lib/db';
-import HeroEditorial from '../components/HeroEditorial';
-import AboutWriterCard from '../components/AboutWriterCard';
+import HomeMasthead from '../components/HomeMasthead';
 import PostCardFeatured from '../components/PostCardFeatured';
 import PostCardCompact from '../components/PostCardCompact';
-import NewsSection from '../components/NewsSection';
 import SectionReveal from '../components/SectionReveal';
 
 export const dynamic = 'force-dynamic';
@@ -29,38 +27,76 @@ export default async function Home(){
     LIMIT 9
   `) as Post[];
 
+  const recent = latest.slice(0,5);
+
   return (
     <>
-      <HeroEditorial />
-      <AboutWriterCard />
+      <HomeMasthead />
 
-      <SectionReveal>
-        <section className="section container">
-          <h2 className="sec-title">Featured</h2>
-          <p className="sec-sub">Hand‑picked highlights</p>
-          <div className="h-scroll" style={{ marginTop:12 }}>
-            {featured.map(p => (
-              <PostCardFeatured key={p.id} title={p.title} slug={p.slug} cover={p.cover_image_url||undefined} date={p.d||undefined} />
-            ))}
+      <section className="section container">
+        <div className="home-grid">
+          {/* Main feed */}
+          <div>
+            <SectionReveal>
+              <h2 className="sec-title">Featured</h2>
+              <p className="sec-sub">Hand‑picked highlights</p>
+              <div className="h-scroll" style={{ marginTop:12 }}>
+                {featured.map(p => (
+                  <PostCardFeatured key={p.id} title={p.title} slug={p.slug} cover={p.cover_image_url||undefined} date={p.d||undefined} />
+                ))}
+              </div>
+            </SectionReveal>
+
+            <SectionReveal delay={.1}>
+              <h2 className="sec-title" style={{ marginTop: 20 }}>Latest</h2>
+              <p className="sec-sub">Fresh from the blog</p>
+              <div style={{ display:'grid', gap:16 }}>
+                {latest.map(p => (
+                  <div key={p.id} className="post-card">
+                    {p.cover_image_url ? <img src={p.cover_image_url} alt="" /> : <div style={{ height: 200, background:'#eef2f7' }} />}
+                    <div className="post-body">
+                      <h3 className="post-title"><a href={`/blog/${p.slug}`}>{p.title}</a></h3>
+                      <div className="post-meta">{p.d ? new Date(p.d).toLocaleDateString() : ''}</div>
+                      {p.excerpt ? <p className="sec-sub" style={{ marginTop: 6 }}>{p.excerpt}</p> : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </SectionReveal>
           </div>
-        </section>
-      </SectionReveal>
 
-      <SectionReveal delay={.1}>
-        <section className="section container">
-          <h2 className="sec-title">Latest</h2>
-          <p className="sec-sub">Fresh from the blog</p>
-          <div className="grid-auto" style={{ marginTop:12 }}>
-            {latest.map(p => (
-              <PostCardCompact key={p.id} title={p.title} slug={p.slug} excerpt={p.excerpt} date={p.d||undefined} cover={p.cover_image_url||undefined} />
-            ))}
-          </div>
-        </section>
-      </SectionReveal>
+          {/* Sidebar */}
+          <aside>
+            <SectionReveal>
+              <div className="widget">
+                <h3>Search</h3>
+                <form className="search-wide" action="/blog" method="get">
+                  <input name="q" placeholder="Search posts…" />
+                  <button className="btn btn-ghost" type="submit">Go</button>
+                </form>
+              </div>
+            </SectionReveal>
 
-      <SectionReveal delay={.15}>
-        <NewsSection />
-      </SectionReveal>
+            <SectionReveal delay={.06}>
+              <div className="widget" style={{ marginTop: 16 }}>
+                <h3>Recent Posts</h3>
+                <div className="recent-list">
+                  {recent.map(p => (
+                    <div key={p.id} className="recent-item">
+                      {p.cover_image_url ? <img className="recent-thumb" src={p.cover_image_url} alt="" /> : <div className="recent-thumb" />}
+                      <div>
+                        <a href={`/blog/${p.slug}`}>{p.title}</a>
+                        <div className="post-meta">{p.d ? new Date(p.d).toLocaleDateString() : ''}</div>
+                      </div>
+                    </div>
+                  ))}
+                  {recent.length === 0 ? <p className="sec-sub">No posts yet.</p> : null}
+                </div>
+              </div>
+            </SectionReveal>
+          </aside>
+        </div>
+      </section>
     </>
   );
 }
