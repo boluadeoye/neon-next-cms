@@ -1364,3 +1364,64 @@ h1, h2, h3,
 .masthead { height: clamp(200px, 26vw, 270px); }
 .mast-intro { margin-top: -42px; margin-bottom: 14px; }
 .avatar-ring { width: 96px; height: 96px; }
+
+/* === Amplified, continuous glow for the masthead name === */
+/* This runs forever and does NOT depend on the content itself. */
+.mast-name{
+  position: relative;
+  /* keep hero text white/bright; glow layers handle color */
+  color: #ffffff;
+  /* run forever, smooth */
+  animation: mastGlow 4.6s ease-in-out .15s infinite both;
+  will-change: text-shadow, filter, transform, opacity;
+}
+
+/* soft animated halo behind the text (sits behind the letters) */
+.mast-name::after{
+  content:"";
+  position:absolute;
+  left:50%; top:52%;
+  transform: translate(-50%, -50%);
+  width: clamp(180px, 38vw, 520px);
+  height: clamp(60px, 10vw, 140px);
+  pointer-events:none;
+  border-radius: 50%;
+  z-index: -1;
+  background:
+    radial-gradient(closest-side, rgba(194,139,55,.35), rgba(194,139,55,.18) 45%, transparent 70%),
+    radial-gradient(closest-side, rgba(255,255,255,.18), transparent 65%);
+  filter: blur(8px);
+  opacity: 0;
+  animation: mastHalo 4.6s ease-in-out .15s infinite both;
+}
+
+/* stronger but classy glow on the text itself (gold + white) */
+@keyframes mastGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 0 rgba(194,139,55,0),
+      0 0 0 rgba(255,255,255,0);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+    transform: translateY(0) scale(1);
+  }
+  45% {
+    text-shadow:
+      0 0 10px rgba(255,255,255,.22),
+      0 0 26px rgba(194,139,55,.55),
+      0 0 56px rgba(194,139,55,.45);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.28));
+    transform: translateY(-1px) scale(1.012);
+  }
+}
+
+/* the halo breathes in/out in sync with the glow */
+@keyframes mastHalo {
+  0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+  45%      { opacity: .95; transform: translate(-50%, -50%) scale(1.06); }
+}
+
+/* tighten hero sizing so the page isn’t top-heavy */
+.masthead { height: clamp(200px, 26vw, 260px); }
+.mast-intro { margin-top: -38px; margin-bottom: 14px; }
+.avatar-ring { width: 96px; height: 96px; }
+
