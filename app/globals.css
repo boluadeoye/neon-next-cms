@@ -801,3 +801,34 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
 
 /* Extra: keep header nicely spaced */
 .header-inner { padding-inline: 8px; }
+
+/* === Animated nav chips (used on non-home pages) === */
+.nav-chip{
+  position:relative;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px; border-radius:999px; text-decoration:none;
+  color:var(--navy);
+  background: linear-gradient(#fff,#fff) padding-box,
+             linear-gradient(135deg, rgba(194,139,55,.65), rgba(13,35,64,.45)) border-box;
+  border:1px solid transparent;
+  box-shadow: 0 6px 18px rgba(13,35,64,.08);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.nav-chip:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(13,35,64,.12); filter: saturate(1.03); }
+
+/* === Blog hero (categories + search) === */
+.blog-hero { background: var(--navy); color:#fff; border-radius:20px; padding:22px; box-shadow: var(--shadow-lg); }
+.blog-hero h1 { margin:0; font-size:32px; line-height:1.2; }
+.blog-hero p { margin:6px 0 0; opacity:.9; }
+
+.cat-bar { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+.cat-chip {
+  display:inline-flex; align-items:center; gap:6px; padding:8px 12px; border-radius:999px; text-decoration:none;
+  background: rgba(255,255,255,.08); color:#fff; border:1px solid rgba(255,255,255,.35);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.cat-chip:hover{ transform:translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+.cat-chip.active{ background:#fff; color:var(--navy); border-color:#fff; }
+
+.search-wrap { display:flex; gap:8px; align-items:center; margin-top:12px; }
+.search { flex:1; border:1px solid rgba(255,255,255,.35); background:#fff; color:var(--text); border-radius:12px; padding:10px 12px; }
