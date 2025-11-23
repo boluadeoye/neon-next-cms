@@ -4,17 +4,17 @@ import HeaderBrand from '../components/HeaderBrand';
 import HeaderAvatar from '../components/HeaderAvatar';
 import SiteFooter from '../components/SiteFooter';
 import NavLinks from '../components/NavLinks';
-import { Cormorant_Garamond, Sora } from 'next/font/google';
+import { Bodoni_Moda, Lato } from 'next/font/google';
 
-const display = Cormorant_Garamond({
+const display = Bodoni_Moda({
   subsets: ['latin'],
-  weight: ['400','500','600','700'],
+  weight: ['400','500','600','700','800','900'],
   variable: '--font-display',
   display: 'swap'
 });
-const sans = Sora({
+const body = Lato({
   subsets: ['latin'],
-  weight: ['400','500','600','700','800'],
+  weight: ['300','400','700','900'],
   variable: '--font-sans',
   display: 'swap'
 });
@@ -26,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body style={{ fontFamily: 'var(--font-sans)' }}>
         <header className="header">
           <div className="container header-inner">

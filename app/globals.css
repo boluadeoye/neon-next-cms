@@ -853,3 +853,26 @@ h1, h2, h3, .sec-title, .hero-title, .brand, .blog-hero h1 {
 
 /* Optional: slightly raise line-height for body copy with Sora */
 .prose { line-height: 1.65; }
+
+/* ===== Global typography: Bodoni Moda (display) + Lato (body/UI) ===== */
+body, button, input, select, textarea,
+.nav, .nav-chip, .chip, .chip-shine, .btn, .tag, .pill,
+.table, .comment-card, .actions-bar, .about-card, .blog-hero {
+  font-family: var(--font-sans), Lato, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  letter-spacing: 0;
+}
+
+h1, h2, h3,
+.sec-title, .hero-title, .brand, .blog-hero h1 {
+  font-family: var(--font-display), "Bodoni Moda", serif;
+  letter-spacing: .005em;           /* Bodoni reads best slightly open */
+  font-weight: 700;                 /* strong but refined */
+}
+
+/* Fine-tune headline sizes for Bodoni */
+.hero-title { font-size: clamp(28px, 6vw, 46px); font-weight: 700; }
+.sec-title  { font-size: clamp(24px, 4.2vw, 30px); font-weight: 700; }
+.hero-eyebrow{ font-family: var(--font-display), "Bodoni Moda", serif; letter-spacing: .12em; }
+
+/* Body copy—slightly taller line height for Lato */
+.prose { line-height: 1.7; }
