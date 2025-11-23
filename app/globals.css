@@ -896,3 +896,36 @@ h1, h2, h3,
 .hero-title { font-size: clamp(28px, 6vw, 44px); line-height: 1.15; }
 .sec-title  { font-size: clamp(24px, 4.2vw, 30px); line-height: 1.2; }
 .hero-eyebrow{ font-family: var(--font-display), Merriweather, serif; letter-spacing: .08em; }
+
+/* === Icon share chips === */
+.icon-row{ display:flex; gap:10px; flex-wrap:wrap; }
+.icon-chip{
+  width:38px; height:38px; border-radius:999px; display:inline-flex;
+  align-items:center; justify-content:center; text-decoration:none;
+  color:#fff; border:1px solid rgba(255,255,255,.2);
+  box-shadow: 0 10px 22px rgba(13,35,64,.22);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.icon-chip:hover{ transform: translateY(-2px); box-shadow: 0 14px 30px rgba(13,35,64,.28); filter:saturate(1.05); }
+
+.icon-x{ background:#0f1419; } /* X (Twitter) */
+.icon-linkedin{ background: linear-gradient(180deg,#0A66C2,#0a5db0); }
+.icon-facebook{ background: linear-gradient(180deg,#1877F2,#165fbe); }
+.icon-whatsapp{ background: linear-gradient(180deg,#25D366,#1fb558); }
+
+/* SVG icons use currentColor */
+.icon-chip svg{ width:18px; height:18px; display:block; }
+
+/* === Contents (TOC) separators === */
+.toc{ background:#fff; }
+.toc ul{ list-style:none; margin:0; padding:0; }
+.toc li{ background: #F6F7FB; border:1px solid rgb(var(--line));
+         border-radius:10px; overflow:hidden; }
+.toc li + li{ margin-top:8px; }
+.toc a{ display:block; padding:10px 12px; color:var(--text); text-decoration:none; }
+.toc a:hover{ background: #eef1f6; }
+.toc .h2{ padding-left: 18px; } .toc .h3{ padding-left: 30px; }
+
+/* === Give posts real bottom breathing room from footer === */
+.footer{ margin-top: 96px; } /* was smaller; ensure separation site-wide */
+.post-bottom-pad{ padding-bottom: 96px; } /* add this to post container */
