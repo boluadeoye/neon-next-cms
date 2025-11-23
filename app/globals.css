@@ -1305,3 +1305,62 @@ h1, h2, h3,
 .intro-text{ margin: 0; color: var(--muted); }
 .intro-row{ margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; }
 .intro-row .btn{ padding: 8px 12px; }
+
+/* === Darker intro card (with continual breathe) === */
+.intro-card{
+  width: 100%;
+  max-width: min(720px, 100vw - 32px);
+  margin: 0 auto 18px;
+  background: linear-gradient(180deg, #0F1D32, #0B1526); /* navy gradient */
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+  box-shadow: 0 18px 50px rgba(13,35,64,.30);
+  padding: 14px 16px;
+  color: #E6EAF2;
+  will-change: transform, box-shadow, filter;
+  animation:
+    introPop .45s ease-out both,         /* first appear */
+    introBreathe 9s ease-in-out .6s infinite;  /* continual smooth pop */
+}
+.intro-title{
+  margin: 0 0 6px;
+  font-family: var(--font-display), serif;
+  font-weight: 700; font-size: 18px; color: #FFFFFF;
+}
+.intro-text{ margin: 0; color: #C8D0DB; }
+.intro-row{ margin-top: 10px; display:flex; gap:10px; flex-wrap:wrap; }
+.intro-row .btn{ padding: 8px 12px; }
+.intro-row .btn-ghost{
+  background: rgba(255,255,255,.10);
+  color: #E6EAF2;
+  border: 1px solid rgba(255,255,255,.18);
+}
+
+/* first-appear pop */
+@keyframes introPop {
+  from { opacity: 0; transform: translateY(10px) scale(.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+/* continual breathe (subtle) */
+@keyframes introBreathe {
+  0%   { transform: translateY(0) scale(1);   box-shadow: 0 18px 50px rgba(13,35,64,.30); filter: saturate(1); }
+  50%  { transform: translateY(-2px) scale(1.015); box-shadow: 0 26px 70px rgba(13,35,64,.36); filter: saturate(1.03); }
+  100% { transform: translateY(0) scale(1);   box-shadow: 0 18px 50px rgba(13,35,64,.30); filter: saturate(1); }
+}
+
+/* === Hero name glow (continual, classy) === */
+.mast-name{
+  text-shadow: 0 0 0 rgba(194,139,55,0);
+  animation: mastGlow 3.8s ease-in-out 0.2s infinite;
+  will-change: filter, text-shadow;
+}
+@keyframes mastGlow {
+  0%,100% { text-shadow: 0 0 0 rgba(194,139,55,0), 0 0 0 rgba(255,255,255,0); filter: drop-shadow(0 0 0 rgba(255,255,255,0)); }
+  50%     { text-shadow: 0 0 22px rgba(194,139,55,.45), 0 0 6px rgba(255,255,255,.25);
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,.25)); }
+}
+
+/* keep the hero proportion tight so the page isn't top-heavy */
+.masthead { height: clamp(200px, 26vw, 270px); }
+.mast-intro { margin-top: -42px; margin-bottom: 14px; }
+.avatar-ring { width: 96px; height: 96px; }
