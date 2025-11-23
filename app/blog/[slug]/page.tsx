@@ -3,12 +3,10 @@ import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../../../lib/db';
 import MarkdownView from '../../../components/MarkdownView';
 import ProgressBar from '../../../components/ProgressBar';
-import TagChip from '../../../components/TagChip';
 import { extractHeadings } from '../../../lib/md';
 import { readingTime } from '../../../lib/reading';
 import LikeButton from '../../../components/LikeButton';
 import ShareBar from '../../../components/ShareBar';
-import Comments from '../../../components/Comments';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -50,7 +48,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     ORDER BY COALESCE(published_at, updated_at) ASC
     LIMIT 1
   `) as { title: string; slug: string }[];
-
   const older = (await sql`
     SELECT title, slug FROM posts
     WHERE status='published' AND COALESCE(published_at, updated_at) < ${d}
@@ -66,9 +63,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     <>
       <ProgressBar />
 
-      {/* Compact hero (centered) */}
+      {/* Hero (centered) */}
       <section className="post-hero">
-        <div className="article">
+        <div className="container-narrow">
           <h1 className="post-title">{post.title}</h1>
           <div className="post-meta">
             {date ? new Date(date).toLocaleDateString() : ''} • {rt.minutes} min read
@@ -90,33 +87,56 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       </section>
 
       {/* Content + TOC */}
-      <section className="container">
+      <section className="container post-bottom-pad">
         <div className="post-grid" style={{ width:'100%' }}>
-          <article className="article">
+          <article className="container-narrow" style={{ maxWidth:'min(var(--content), 100vw - 32px)' }}>
             <MarkdownView content={post.content} />
 
+            {/* Tag chips */}
             {tags?.length ? (
               <>
                 <hr className="div" />
-                <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                  {tags.map(t => <TagChip key={t.slug} name={t.name} slug={t.slug} />)}
+                <div className="meta-row">
+                  {tags.map(t => (
+                    <a key={t.slug} className="tag-chip" href={`/blog?q=${encodeURIComponent(t.slug)}`}>#{t.name}</a>
+                  ))}
                 </div>
               </>
             ) : null}
 
+            {/* Prev / Next chips */}
             <hr className="div" />
-            <div style={{ display:'flex', justifyContent:'space-between', gap:12, flexWrap:'wrap' }}>
+            <div className="prevnext">
               <div>
-                {newer[0] ? <a className="btn" href={`/blog/${encodeURIComponent(newer[0].slug)}`}>← {newer[0].title}</a> : <span className="muted">No newer post</span>}
+                {newer[0] ? (
+                  <a className="chip-link" href={`/blog/${encodeURIComponent(newer[0].slug)}`}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 19l-7-7 7-7"/></svg>
+                    <span>{newer[0].title}</span>
+                  </a>
+                ) : (
+                  <span className="chip-link disabled" aria-disabled="true">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.5 19l-7-7 7-7"/></svg>
+                    <span>No newer post</span>
+                  </span>
+                )}
               </div>
               <div>
-                {older[0] ? <a className="btn" href={`/blog/${encodeURIComponent(older[0].slug)}`}>{older[0].title} →</a> : <span className="muted">No older post</span>}
+                {older[0] ? (
+                  <a className="chip-link" href={`/blog/${encodeURIComponent(older[0].slug)}`}>
+                    <span>{older[0].title}</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 5l7 7-7 7"/></svg>
+                  </a>
+                ) : (
+                  <span className="chip-link disabled" aria-disabled="true">
+                    <span>No older post</span>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 5l7 7-7 7"/></svg>
+                  </span>
+                )}
               </div>
             </div>
-
-            <Comments slug={post.slug} />
           </article>
 
+          {/* TOC */}
           <aside className="toc" aria-label="Table of contents">
             <h3>Contents</h3>
             <ul>

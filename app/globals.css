@@ -929,3 +929,45 @@ h1, h2, h3,
 /* === Give posts real bottom breathing room from footer === */
 .footer{ margin-top: 96px; } /* was smaller; ensure separation site-wide */
 .post-bottom-pad{ padding-bottom: 96px; } /* add this to post container */
+
+/* === Post meta polish: tag chips + prev/next chips === */
+.meta-row{
+  display:flex; gap:10px; flex-wrap:wrap; margin-top: 6px;
+}
+
+/* Tag chips (link to blog search) */
+.tag-chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:8px 12px; border-radius:999px; text-decoration:none;
+  color:var(--navy);
+  background: linear-gradient(#fff,#fff) padding-box,
+             linear-gradient(135deg, rgba(194,139,55,.55), rgba(13,35,64,.35)) border-box;
+  border:1px solid transparent;
+  box-shadow: 0 6px 18px rgba(13,35,64,.08);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.tag-chip:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.12); filter:saturate(1.04); }
+
+/* Prev/Next row */
+.prevnext{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin-top: 12px;
+}
+
+/* Chip link buttons with arrow */
+.chip-link{
+  display:inline-flex; align-items:center; gap:10px;
+  padding:10px 14px; border-radius:999px; text-decoration:none; cursor:pointer;
+  background: linear-gradient(#fff,#fff) padding-box,
+             linear-gradient(135deg, rgba(194,139,55,.55), rgba(13,35,64,.35)) border-box;
+  border:1px solid transparent;
+  color:var(--navy);
+  box-shadow: 0 6px 18px rgba(13,35,64,.10);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.chip-link:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(13,35,64,.16); filter:saturate(1.03); }
+.chip-link svg{ width:14px; height:14px; display:block; }
+.chip-link.disabled{ opacity:.45; pointer-events:none; }
+
+/* keep comfortable space above footer */
+.post-bottom-pad{ padding-bottom: 96px; }
