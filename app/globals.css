@@ -767,3 +767,37 @@ section, header, footer, main, article, aside { overflow-x: visible !important; 
   font-size: clamp(56px, 14vw, 150px);
   pointer-events:none; user-select:none;
 }
+
+/* === Dynamic brand icon animation === */
+@keyframes brand-pulse {
+  0%   { transform: rotate(0deg) scale(1);   filter: drop-shadow(0 0 0 rgba(194,139,55,.0)); }
+  50%  { transform: rotate(8deg) scale(1.03); filter: drop-shadow(0 0 10px rgba(194,139,55,.25)); }
+  100% { transform: rotate(0deg) scale(1);   filter: drop-shadow(0 0 0 rgba(194,139,55,.0)); }
+}
+.brand-icon { animation: brand-pulse 6s ease-in-out infinite; }
+
+/* === Shiny animated chip (for Blog on home) === */
+.chip-shine{
+  position:relative;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 16px; border-radius:999px; text-decoration:none; cursor:pointer;
+  color:#fff; background: linear-gradient(90deg, #0D2340, #1b3e6b);
+  box-shadow: 0 10px 24px rgba(13,35,64,.25);
+  border:1px solid rgba(255,255,255,.18);
+  overflow:hidden;
+}
+.chip-shine::after{
+  content:""; position:absolute; inset:0; pointer-events:none;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.35) 40%, transparent 70%);
+  transform: translateX(-120%);
+  animation: chip-sheen 2.8s ease-in-out infinite;
+}
+@keyframes chip-sheen{
+  0%   { transform: translateX(-120%); }
+  50%  { transform: translateX(0%); }
+  100% { transform: translateX(120%); }
+}
+.chip-shine:hover{ transform: translateY(-2px); box-shadow: 0 16px 32px rgba(13,35,64,.28); }
+
+/* Extra: keep header nicely spaced */
+.header-inner { padding-inline: 8px; }

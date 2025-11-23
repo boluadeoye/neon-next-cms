@@ -3,56 +3,25 @@ export default function HeaderBrand() {
     <a
       href="/"
       aria-label="Home"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        textDecoration: 'none',
-        color: 'var(--navy)'
-      }}
+      style={{ display:'inline-flex', alignItems:'center', textDecoration:'none' }}
     >
       <svg
-        width="156"
-        height="40"
-        viewBox="0 0 156 40"
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-label="Boluadeoye signature"
+        className="brand-icon"
+        width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg"
+        role="img" aria-label="Brand icon"
       >
         <defs>
-          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="0.6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
+          <radialGradient id="g1" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stopColor="#C28B37"/>
+            <stop offset="60%" stopColor="#C28B37" stopOpacity=".75"/>
+            <stop offset="100%" stopColor="#0D2340"/>
+          </radialGradient>
         </defs>
-
-        {/* Name */}
-        <text
-          x="0"
-          y="26"
-          fill="currentColor"
-          filter="url(#soft)"
-          style={{
-            fontFamily: 'var(--font-display), serif',
-            fontWeight: 700,
-            fontStyle: 'italic',
-            letterSpacing: '.5px'
-          }}
-        >
-          Boluadeoye
-        </text>
-
-        {/* Ochre flourish */}
-        <path
-          d="M3 30 C 38 43, 92 5, 152 28"
-          fill="none"
-          stroke="#C28B37"
-          strokeWidth={2.6}
-          strokeLinecap="round"
-          strokeOpacity={0.92}
-        />
+        <!-- outer ring -->
+        <circle cx="18" cy="18" r="16" fill="url(#g1)" stroke="#0D2340" strokeWidth="1.5"/>
+        <!-- inner motif -->
+        <path d="M10 18c4-8 12-8 16 0-4 8-12 8-16 0Z" fill="#fff" fillOpacity=".9" stroke="#0D2340" strokeWidth="1.2"/>
+        <circle cx="18" cy="18" r="3.2" fill="#0D2340" />
       </svg>
     </a>
   );
