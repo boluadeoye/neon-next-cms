@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sql } from '../../../../lib/db';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
+import { authOptions } from '../../../../lib/nextauth';
 
 export const runtime = 'nodejs';
 
