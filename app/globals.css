@@ -1699,3 +1699,67 @@ h1, h2, h3,
    - Read: .btn-pulse-strong
    - Portfolio: .btn-pulse-soft
    (already defined earlier) */
+
+/* === Intro card: softened edges + elegant borders + height-only growth === */
+.intro-card.pro-intro {
+  /* exact width, not full screen */
+  width: min(720px, calc(100vw - 48px));
+  margin-left: auto;
+  margin-right: auto;
+
+  /* soften corners (slight radius) */
+  border-radius: 8px !important;
+
+  /* subtle twin borders for a premium edge */
+  border: 1px solid rgba(255,255,255,.12);
+  outline: 1px solid rgba(13,35,64,.14);
+  outline-offset: -1px;
+
+  /* height only: increase vertical padding, keep horizontal tight */
+  padding-block: clamp(26px, 5.6vw, 48px);
+  padding-inline: clamp(16px, 3.2vw, 24px);
+}
+
+/* keep internal spacing airy */
+.intro-card.pro-intro .intro-content { gap: clamp(10px, 2vw, 16px); }
+
+/* Fix harsh ochre overlay on the Read button (simpler fill + subtle shadow) */
+.intro-card.pro-intro .btn-ochre {
+  background: linear-gradient(180deg, #E6B54E, #D99C2D) !important; /* clean, warm */
+  color: #fff !important;
+  border: 1px solid #C69027 !important;
+  box-shadow: 0 8px 18px rgba(224,167,42,.25) !important;           /* toned-down */
+  filter: none !important;
+}
+.intro-card.pro-intro .btn-ochre:hover {
+  filter: saturate(1.03) brightness(1.01);
+  box-shadow: 0 12px 26px rgba(224,167,42,.28);
+}
+
+/* Portfolio stays elegant with a soft pulse (already pulsing via .btn-pulse-soft) */
+.intro-card.pro-intro .btn-ghost {
+  background: linear-gradient(180deg, #ffffff, #eef2f7) !important;
+  color: var(--navy) !important;
+  border: 1px solid rgba(13,35,64,.18) !important;
+  box-shadow: 0 10px 22px rgba(13,35,64,.10) !important;
+}
+
+/* Finger points ONLY at Read button (centered above it) */
+.finger-dangle { position: relative; cursor: pointer; }
+.finger-dangle::after {
+  content: "👇";
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  transform: translateX(-50%);
+  font-size: 18px;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
+  animation: finger-bob 1.6s ease-in-out infinite;
+}
+@keyframes finger-bob {
+  0%   { transform: translateX(-50%) translateY(0);   opacity: .9; }
+  50%  { transform: translateX(-50%) translateY(-3px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0);   opacity: .9; }
+}
