@@ -1,5 +1,4 @@
 import { sql } from '../lib/db';
-
 function val(v:any, fallback=''){ return typeof v === 'string' ? v : (v?.value ?? fallback); }
 
 export default async function HomeMasthead(){
@@ -21,15 +20,26 @@ export default async function HomeMasthead(){
 
   const x   = val(map.hero_social_twitter, '') || '';
   const li  = val(map.hero_social_linkedin, '') || '';
-  const ig  = val(map.hero_social_github, '') || ''; // repurpose if needed
+  const ig  = val(map.hero_social_github, '') || '';
 
   return (
     <>
       <div className="masthead">
         <div className="mast-bg" style={{ backgroundImage: `url(${cover})` }} />
+
+        {/* New: layered ambience */}
+        <div className="mast-aurora" aria-hidden="true">
+          <span className="a a1" />
+          <span className="a a2" />
+        </div>
+        <div className="mast-grain" aria-hidden="true" />
+        <div className="mast-vignette" aria-hidden="true" />
+
         <div className="mast-overlay" />
         <div className="mast-inner">
-          <h1 className="mast-name">{displayName}</h1>
+          <h1 className="mast-name">
+            <span className="mast-logo">{displayName}</span>
+          </h1>
         </div>
       </div>
 
