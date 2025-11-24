@@ -6,14 +6,14 @@ export default async function HomeMasthead(){
   const rows = (await sql`
     SELECT key, value FROM settings
     WHERE key = ANY(${[
-      'hero_name','hero_bio','hero_email',
+      'hero_bio','hero_email',
       'hero_avatar_url','hero_cover_url',
       'hero_social_twitter','hero_social_linkedin','hero_social_github'
     ]})
   `) as { key:string; value:any }[];
 
   const map = Object.fromEntries(rows.map(r=>[r.key,r.value]));
-  const name   = val(map.hero_name, 'OMOLAYO');
+  const displayName = 'Layo, The Novelist.'; // final locked display name
   const bio    = val(map.hero_bio, 'I write clear, compelling stories that move people to action.');
   const email  = val(map.hero_email, '');
   const avatar = val(map.hero_avatar_url, 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=480&auto=format&fit=crop');
@@ -25,16 +25,14 @@ export default async function HomeMasthead(){
 
   return (
     <>
-      {/* Dark cover masthead */}
       <div className="masthead">
         <div className="mast-bg" style={{ backgroundImage: `url(${cover})` }} />
         <div className="mast-overlay" />
         <div className="mast-inner">
-          <h1 className="mast-name">{String(name).toUpperCase()}</h1>
+          <h1 className="mast-name">{displayName}</h1>
         </div>
       </div>
 
-      {/* Overlapping avatar & intro (sits above hero due to z-index) */}
       <div className="mast-intro">
         <span className="avatar-wrap">
           <img className="avatar-ring" src={avatar} alt="" />

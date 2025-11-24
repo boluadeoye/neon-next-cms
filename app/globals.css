@@ -1425,3 +1425,47 @@ h1, h2, h3,
 .mast-intro { margin-top: -38px; margin-bottom: 14px; }
 .avatar-ring { width: 96px; height: 96px; }
 
+
+/* Hero name: no uppercase transform, keep punctuation; always-glow */
+.mast-name{
+  text-transform: none;
+  white-space: nowrap;
+  letter-spacing: .04em;
+  color: #fff;
+  position: relative;
+  animation: mastGlow 5.2s ease-in-out .15s infinite both;
+  will-change: text-shadow, filter, transform, opacity;
+}
+.mast-name::after{
+  content:"";
+  position:absolute; left:50%; top:56%;
+  transform: translate(-50%, -50%);
+  width: clamp(200px, 42vw, 580px);
+  height: clamp(68px, 12vw, 160px);
+  pointer-events:none; border-radius: 50%;
+  background:
+    radial-gradient(closest-side, rgba(194,139,55,.50), rgba(194,139,55,.22) 45%, transparent 70%),
+    radial-gradient(closest-side, rgba(255,255,255,.26), transparent 65%);
+  filter: blur(10px);
+  opacity: 0;
+  animation: mastHalo 5.2s ease-in-out .15s infinite both;
+}
+@keyframes mastGlow {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(194,139,55,0), 0 0 0 rgba(255,255,255,0);
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0));
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    text-shadow:
+      0 0 14px rgba(255,255,255,.28),
+      0 0 34px rgba(194,139,55,.65),
+      0 0 80px rgba(194,139,55,.55);
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.28));
+    transform: translateY(-1px) scale(1.018);
+  }
+}
+@keyframes mastHalo {
+  0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+}
