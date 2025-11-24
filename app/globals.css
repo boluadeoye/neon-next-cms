@@ -1763,3 +1763,46 @@ h1, h2, h3,
   50%  { transform: translateX(-50%) translateY(-3px); opacity: 1; }
   100% { transform: translateX(-50%) translateY(0);   opacity: .9; }
 }
+
+/* === HERO: shorter, square bottom corners, stronger title === */
+.masthead{
+  /* reduce overall height */
+  height: clamp(220px, 34vw, 320px) !important;
+  /* keep top radius if you want, but make bottom corners perfectly sharp */
+  border-radius: 16px 16px 0 0 !important;
+}
+.mast-inner { padding: clamp(16px, 4vw, 26px) !important; }
+
+/* Solidify the logo text */
+.mast-logo{
+  font-size: clamp(32px, 6vw, 64px) !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.3px !important;
+  -webkit-text-stroke: 1px rgba(10,16,28,.55) !important;
+          text-stroke: 1px rgba(10,16,28,.55) !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.32),
+    0 8px 22px rgba(239,195,92,.30),
+    0 0 36px rgba(239,195,92,.20) !important;
+}
+
+/* === Intro card: restore original height, nudge up === */
+.mast-intro{
+  /* pull the card closer to the hero */
+  margin-top: -72px !important;  /* was around -64; small nudge up */
+}
+
+/* restore smaller card height (pre-change feel) */
+.intro-card.pro-intro{
+  padding-block: clamp(16px, 3.2vw, 24px) !important; /* shorter again */
+  padding-inline: clamp(14px, 3vw, 22px) !important;
+  width: min(720px, calc(100vw - 48px));             /* same centered width you chose */
+  border-radius: 8px !important;                      /* slightly softened corners */
+}
+
+/* === Bring Featured into view sooner (tighten space below the card) === */
+.section.container{
+  /* if this rule exists, this override will gently reduce the vertical gap */
+  padding-top: clamp(8px, 1.6vw, 12px) !important;
+  margin-top: clamp(6px, 1.6vw, 10px) !important;
+}
