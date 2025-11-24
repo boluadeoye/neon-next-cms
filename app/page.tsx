@@ -66,15 +66,7 @@ export default async function Home(){
 
           {/* Sidebar */}
           <aside>
-            <div className="widget">
-              <h3>Search</h3>
-              <form className="search-wide" action="/blog" method="get">
-                <input name="q" placeholder="Search posts…" />
-                <button className="btn btn-ghost" type="submit">Go</button>
-              </form>
-            </div>
-
-            <div className="widget" style={{ marginTop: 16 }}>
+<div className="widget">
               <h3>Recent Posts</h3>
               <div className="recent-list">
                 {recent.map(p => (
