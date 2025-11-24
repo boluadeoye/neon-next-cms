@@ -1,41 +1,40 @@
 import { NextResponse } from 'next/server';
-import { sql } from '../../../../lib/db';
 import { createUser } from '../../../../lib/auth';
 import { signToken } from '../../../../lib/jwt';
+import { sql } from '../../../../lib/db';
 
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {
-    const { email, name, password } = await req.json();
-
-    if (!email || !password) {
-      return NextResponse.json({ ok: false, error: 'Email and password required' }, { status: 400 });
+    const { name, email, password } = await req.json();
+    if (!name || !email || !password) {
+      return NextResponse.json({ ok: false, error: 'bad_request' }, { status: 400 });
     }
 
-    // LIMIT: allow up to TWO admins only
-    const rows = (await sql`SELECT COUNT(*)::int AS c FROM users WHERE role = 'admin'`) as { c: number }[];
-    const adminCount = rows?.[0]?.c ?? 0;
-    if (adminCount >= 2) {
-      return NextResponse.json({ ok: false, error: 'Registration closed: 2 admins already created' }, { status: 403 });
+    // Guard: allow up to two admins, then close registration
+    const c = await sql/*sql*/`SELECT COUNT(*)::int AS n FROM users`;
+    if ((c?.[0]?.n ?? 0) >= 2) {
+      return NextResponse.json({ ok: false, error: 'registration_closed' }, { status: 403 });
     }
 
-    const user = await createUser(String(email).toLowerCase(), String(name || ''), String(password));
-    const token = await signToken({ sub: user.id, email: user.email, role: user.role });
+    const user = await createUser(name, email, password);
+    if (!user) {
+      return NextResponse.json({ ok: false, error: 'exists' }, { status: 409 });
+    }
 
-    const res = NextResponse.json({
-      ok: true,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role }
-    });
+    const token = await signToken({ sub: user.id, email: user.email });
+
+    const res = NextResponse.json({ ok: true, user });
     res.cookies.set('session', token, {
       httpOnly: true,
       secure: true,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 24 * 30,
     });
     return res;
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message ?? 'Error' }, { status: 500 });
+  } catch {
+    return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
   }
 }

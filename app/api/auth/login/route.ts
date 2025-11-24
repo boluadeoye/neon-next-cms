@@ -1,3 +1,4 @@
+// fix: stop reading user.role in token payload
 import { NextResponse } from 'next/server';
 import { verifyUser } from '../../../../lib/auth';
 import { signToken } from '../../../../lib/jwt';
@@ -16,7 +17,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false, error: 'invalid_credentials' }, { status: 401 });
     }
 
-    // Build token payload without assuming a role field
     const payload: any = { sub: user.id, email: user.email };
     const maybeRole = (user as any)?.role;
     if (maybeRole) payload.role = maybeRole;
@@ -29,10 +29,10 @@ export async function POST(req: Request) {
       secure: true,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 30, // 30 days
+      maxAge: 60 * 60 * 24 * 30,
     });
     return res;
-  } catch (e) {
+  } catch {
     return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
   }
 }
