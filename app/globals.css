@@ -1806,3 +1806,104 @@ h1, h2, h3,
   padding-top: clamp(8px, 1.6vw, 12px) !important;
   margin-top: clamp(6px, 1.6vw, 10px) !important;
 }
+
+/* === HERO: shorter and perfectly square corners (all four) === */
+.masthead,
+.mast-bg,
+.mast-overlay,
+.mast-aurora,
+.mast-vignette,
+.mast-grain {
+  border-radius: 0 !important;
+}
+.masthead {
+  height: clamp(200px, 30vw, 300px) !important; /* reduce overall hero height */
+}
+.mast-inner { padding: clamp(14px, 3.8vw, 24px) !important; }
+
+/* Stronger “Layo, The Novelist.” */
+.mast-logo {
+  font-weight: 900 !important;
+  font-size: clamp(34px, 6.4vw, 66px) !important;
+  letter-spacing: 0.35px !important;
+  -webkit-text-stroke: 1.2px rgba(8,14,24,.6) !important;
+          text-stroke: 1.2px rgba(8,14,24,.6) !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.30),
+    0 10px 26px rgba(239,195,92,.28),
+    0 0 40px rgba(239,195,92,.22) !important;
+}
+
+/* === Intro card: restore original (smaller) height and nudge up === */
+.mast-intro {
+  margin-top: -64px !important; /* subtle overlap so Featured is closer */
+}
+
+.intro-card.pro-intro {
+  /* keep your centered width; do not full-bleed */
+  width: min(720px, calc(100vw - 48px));
+  margin-left: auto;
+  margin-right: auto;
+
+  /* restore smaller height (pre-change feel) */
+  padding-block: clamp(14px, 3vw, 22px) !important;
+  padding-inline: clamp(14px, 3vw, 22px) !important;
+
+  /* gentle corners and very light borders */
+  border-radius: 6px !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  outline: 1px solid rgba(13,35,64,.12) !important;
+  outline-offset: -1px;
+
+  /* clean background, remove heavy glow that spilled onto Featured */
+  background: linear-gradient(180deg, rgba(12,22,42,.92), rgba(12,22,42,.86)) !important;
+
+  /* lighten drop shadow so it doesn’t “wash” the section below */
+  box-shadow: 0 6px 12px rgba(13,35,64,.10) !important;
+}
+
+/* Bring Featured into view a bit sooner under the card */
+.section.container {
+  padding-top: clamp(6px, 1.2vw, 10px) !important;
+  margin-top: clamp(4px, 1vw, 8px) !important;
+}
+
+/* Read button: keep pulse but remove harsh color overlay */
+.intro-card.pro-intro .btn-ochre {
+  background: linear-gradient(180deg, #E6B54E, #D99C2D) !important;
+  color: #fff !important;
+  border: 1px solid #C69027 !important;
+  box-shadow: 0 8px 18px rgba(224,167,42,.20) !important;
+  filter: none !important;
+}
+.intro-card.pro-intro .btn-ochre:hover {
+  filter: saturate(1.03) brightness(1.01);
+  box-shadow: 0 12px 24px rgba(224,167,42,.24) !important;
+}
+
+/* Portfolio button remains soft and clean (still pulsing via .btn-pulse-soft) */
+.intro-card.pro-intro .btn-ghost {
+  background: linear-gradient(180deg, #ffffff, #eef2f7) !important;
+  color: var(--navy) !important;
+  border: 1px solid rgba(13,35,64,.18) !important;
+  box-shadow: 0 8px 18px rgba(13,35,64,.10) !important;
+}
+
+/* Finger stays pointing ONLY at the Read button */
+.finger-dangle { position: relative; cursor: pointer; }
+.finger-dangle::after {
+  content: "👇";
+  position: absolute;
+  left: 50%;
+  top: -20px;
+  transform: translateX(-50%);
+  font-size: 18px;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
+  animation: finger-bob 1.6s ease-in-out infinite;
+}
+@keyframes finger-bob {
+  0%   { transform: translateX(-50%) translateY(0);   opacity: .9; }
+  50%  { transform: translateX(-50%) translateY(-3px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0);   opacity: .9; }
+}
