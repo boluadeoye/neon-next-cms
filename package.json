@@ -3,12 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
-    "build": "next build",
+    "dev": "WATCHPACK_POLLING=true WATCHPACK_POLLING_INTERVAL=1000 CHOKIDAR_USEPOLLING=1 NEXT_DISABLE_SWC_AUTO_INSTALL=1 next dev -p 3000",
+    "build": "NEXT_DISABLE_SWC_AUTO_INSTALL=1 next build",
     "start": "next start -p 3000"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.5",
+    "@next/swc-android-arm64": "npm:@next/swc-wasm-nodejs@14.2.5",
+    "@next/swc-wasm-nodejs": "14.2.5",
     "@vercel/blob": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "easymde": "^2.20.0",
@@ -16,7 +18,8 @@
     "framer-motion": "^12.23.24",
     "jose": "^6.1.2",
     "lucide-react": "^0.554.0",
-    "next": "^14.2.5",
+    "next": "14.2.5",
+    "next-auth": "4.24.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
