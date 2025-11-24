@@ -1,48 +1,28 @@
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { sql } from '../../../../lib/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../../lib/auth';
 
 export const runtime = 'nodejs';
-export const dynamic = 'force-dynamic';
-
-async function getPostId(slug: string) {
-  const r = await sql`SELECT id FROM posts WHERE LOWER(slug) = LOWER(${slug}) LIMIT 1`;
-  return (r as any[])[0]?.id as string | undefined;
-}
-
-function ensureAnon() {
-  const jar = cookies();
-  let id = jar.get('anon_id')?.value;
-  if (!id) id = crypto.randomUUID();
-  const set = NextResponse.next();
-  set.cookies.set('anon_id', id, { httpOnly: true, secure: true, sameSite: 'lax', path: '/', maxAge: 60 * 60 * 24 * 365 });
-  return { id, set };
-}
-
-export async function GET(req: Request) {
-  const slug = new URL(req.url).searchParams.get('slug') || '';
-  const postId = await getPostId(slug);
-  if (!postId) return NextResponse.json({ ok: false, error: 'Not found' }, { status: 404 });
-
-  const anon = cookies().get('anon_id')?.value || '';
-  const countRows = await sql`SELECT COUNT(*)::int AS c FROM post_likes WHERE post_id = ${postId}`;
-  const likedRows = anon ? await sql`SELECT 1 FROM post_likes WHERE post_id = ${postId} AND anon_id = ${anon} LIMIT 1` : [];
-  return NextResponse.json({ ok: true, count: (countRows as any[])[0].c, liked: (likedRows as any[]).length > 0 });
-}
 
 export async function POST(req: Request) {
-  const slug = new URL(req.url).searchParams.get('slug') || '';
-  const postId = await getPostId(slug);
-  if (!postId) return NextResponse.json({ ok: false, error: 'Not found' }, { status: 404 });
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) return NextResponse.json({ ok:false, error:'auth_required' }, { status: 401 });
 
-  const { id, set } = ensureAnon();
-  const exists = await sql`SELECT 1 FROM post_likes WHERE post_id = ${postId} AND anon_id = ${id} LIMIT 1`;
-  if ((exists as any[]).length > 0) {
-    await sql`DELETE FROM post_likes WHERE post_id = ${postId} AND anon_id = ${id}`;
+  const body = await req.json().catch(()=>({}));
+  const slug = String(body.slug || body.postSlug || '');
+  if (!slug) return NextResponse.json({ ok:false, error:'bad_request' }, { status: 400 });
+
+  const post = await sql/*sql*/`SELECT id FROM posts WHERE slug=${slug} LIMIT 1`;
+  if (!post?.[0]) return NextResponse.json({ ok:false, error:'not_found' }, { status: 404 });
+  const postId = post[0].id;
+
+  const has = await sql/*sql*/`SELECT 1 FROM post_likes WHERE post_id=${postId} AND user_id=${session.user.id} LIMIT 1`;
+  if (has?.length) {
+    await sql/*sql*/`DELETE FROM post_likes WHERE post_id=${postId} AND user_id=${session.user.id}`;
   } else {
-    await sql`INSERT INTO post_likes (post_id, anon_id) VALUES (${postId}, ${id})`;
+    await sql/*sql*/`INSERT INTO post_likes (post_id, user_id) VALUES (${postId}, ${session.user.id}) ON CONFLICT DO NOTHING`;
   }
-  const countRows = await sql`SELECT COUNT(*)::int AS c FROM post_likes WHERE post_id = ${postId}`;
-  const liked = (exists as any[]).length === 0;
-  return NextResponse.json({ ok: true, count: (countRows as any[])[0].c, liked }, { headers: set.headers });
+  const cnt = await sql/*sql*/`SELECT COUNT(*)::int AS n FROM post_likes WHERE post_id=${postId}`;
+  return NextResponse.json({ ok:true, liked: !has?.length, count: cnt?.[0]?.n || 0 });
 }

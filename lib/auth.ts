@@ -1,47 +1,32 @@
-import bcrypt from 'bcryptjs';
+import type { NextAuthOptions } from 'next-auth';
+import Google from 'next-auth/providers/google';
 import { sql } from './db';
 
-type DbUserFull = {
-  id: string;
-  email: string;
-  name: string | null;
-  role: 'admin' | 'editor' | 'author';
-  password_hash: string;
+export const authOptions: NextAuthOptions = {
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    }),
+  ],
+  session: { strategy: 'jwt' },
+  callbacks: {
+    async jwt({ token, account }) {
+      if (account?.provider === 'google' && token.sub) {
+        const rows = await sql/*sql*/`
+          INSERT INTO users_public (google_sub, email, name, image)
+          VALUES (${token.sub}, ${token.email || null}, ${token.name || null}, ${(token as any).picture || null})
+          ON CONFLICT (google_sub)
+          DO UPDATE SET email=excluded.email, name=excluded.name, image=excluded.image
+          RETURNING id
+        `;
+        (token as any).uid = rows?.[0]?.id || (token as any).uid || null;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      (session.user as any).id = (token as any).uid || null;
+      return session;
+    },
+  },
 };
-
-type DbUser = Omit<DbUserFull, 'password_hash'>;
-
-export async function getUserByEmail(email: string) {
-  const rows = (await sql`
-    SELECT id, email, name, role, password_hash
-    FROM users
-    WHERE email = ${email}
-    LIMIT 1
-  `) as DbUserFull[];
-  return rows[0] || null;
-}
-
-export async function createUser(email: string, name: string, password: string) {
-  const password_hash = await bcrypt.hash(password, 10);
-  const rows = (await sql`
-    INSERT INTO users (email, name, password_hash)
-    VALUES (${email}, ${name}, ${password_hash})
-    RETURNING id, email, name, role
-  `) as DbUser[];
-  return rows[0];
-}
-
-export async function verifyUser(email: string, password: string) {
-  const user = await getUserByEmail(email);
-  if (!user) return null;
-  const ok = await bcrypt.compare(password, user.password_hash);
-  if (!ok) return null;
-  const { password_hash, ...safe } = user;
-  return safe as DbUser;
-}
-
-export async function usersCount(): Promise<number> {
-  const rows = (await sql`SELECT COUNT(*)::int AS count FROM users`) as { count: number }[];
-  const count = rows?.[0]?.count ?? 0;
-  return typeof count === 'number' ? count : parseInt(String(count || 0), 10);
-}
