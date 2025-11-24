@@ -1656,3 +1656,46 @@ h1, h2, h3,
    - .btn-pulse-strong on "Read the blog"
    - .btn-pulse-soft on "Portfolio"
 */
+
+/* === Intro card: square corners + exact width + taller padding === */
+.intro-card.pro-intro {
+  /* exact shape: centered card, not full-width */
+  width: min(780px, calc(100vw - 48px)); /* ~780px on desktop, ~24px gutters on mobile */
+  margin-left: auto;
+  margin-right: auto;
+
+  /* square corners */
+  border-radius: 0 !important;
+
+  /* increase only the height via vertical padding */
+  padding-block: clamp(26px, 5.6vw, 48px);
+  padding-inline: clamp(16px, 3.2vw, 24px);
+}
+
+/* space between title/copy/buttons remains airy */
+.intro-card.pro-intro .intro-content { gap: clamp(10px, 2vw, 16px); }
+
+/* Finger points to READ button only (centered above it) */
+.finger-dangle { position: relative; cursor: pointer; }
+.finger-dangle::after {
+  content: "👇";
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  transform: translateX(-50%);
+  font-size: 18px;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
+  animation: finger-bob 1.6s ease-in-out infinite;
+}
+@keyframes finger-bob {
+  0%   { transform: translateX(-50%) translateY(0);   opacity: .9; }
+  50%  { transform: translateX(-50%) translateY(-3px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0);   opacity: .9; }
+}
+
+/* Keep pulses:
+   - Read: .btn-pulse-strong
+   - Portfolio: .btn-pulse-soft
+   (already defined earlier) */
