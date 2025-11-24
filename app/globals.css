@@ -1469,3 +1469,6 @@ h1, h2, h3,
   0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
   50%      { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
 }
+
+/* Home-only wider Blog chip (≈ +17% width via horizontal padding) */
+.chip-home-wider { padding-left: 22px; padding-right: 22px; }
