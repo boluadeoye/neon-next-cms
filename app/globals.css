@@ -1619,3 +1619,40 @@ h1, h2, h3,
 @media (prefers-reduced-motion: reduce) {
   .btn-pulse-strong, .btn-pulse-soft, .finger-dangle::after { animation: none !important; }
 }
+
+/* Intro card: restore full width, sharpen edges, add vertical space only */
+.intro-card.pro-intro {
+  width: 100%;
+  max-width: none;         /* undo earlier clamp */
+  border-radius: 10px;     /* sharp, straight edges */
+  padding-block: clamp(22px, 5.2vw, 42px);  /* taller */
+  padding-inline: clamp(14px, 3.4vw, 24px); /* keep width feel the same */
+}
+
+/* Keep layout airy */
+.intro-card.pro-intro .intro-content { gap: clamp(10px, 2.2vw, 16px); }
+
+/* Finger: point exactly at Read button (top-center, pointing down) */
+.finger-dangle { position: relative; cursor: pointer; }
+.finger-dangle::after {
+  content: "👇";
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  transform: translateX(-50%);
+  font-size: 18px;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.25));
+  animation: finger-bob 1.6s ease-in-out infinite;
+}
+@keyframes finger-bob {
+  0%   { transform: translateX(-50%) translateY(0);   opacity: .9; }
+  50%  { transform: translateX(-50%) translateY(-3px); opacity: 1; }
+  100% { transform: translateX(-50%) translateY(0);   opacity: .9; }
+}
+
+/* Pulses remain as before:
+   - .btn-pulse-strong on "Read the blog"
+   - .btn-pulse-soft on "Portfolio"
+*/
