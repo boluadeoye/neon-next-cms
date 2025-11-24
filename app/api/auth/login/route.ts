@@ -8,15 +8,20 @@ export async function POST(req: Request) {
   try {
     const { email, password } = await req.json();
     if (!email || !password) {
-      return NextResponse.json({ ok: false, error: 'Email and password required' }, { status: 400 });
+      return NextResponse.json({ ok: false, error: 'bad_request' }, { status: 400 });
     }
 
-    const user = await verifyUser(String(email).toLowerCase(), String(password));
+    const user = await verifyUser(email, password);
     if (!user) {
-      return NextResponse.json({ ok: false, error: 'Invalid credentials' }, { status: 401 });
+      return NextResponse.json({ ok: false, error: 'invalid_credentials' }, { status: 401 });
     }
 
-    const token = await signToken({ sub: user.id, email: user.email, role: user.role });
+    // Build token payload without assuming a role field
+    const payload: any = { sub: user.id, email: user.email };
+    const maybeRole = (user as any)?.role;
+    if (maybeRole) payload.role = maybeRole;
+
+    const token = await signToken(payload);
 
     const res = NextResponse.json({ ok: true, user });
     res.cookies.set('session', token, {
@@ -24,10 +29,10 @@ export async function POST(req: Request) {
       secure: true,
       sameSite: 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7
+      maxAge: 60 * 60 * 24 * 30, // 30 days
     });
     return res;
-  } catch (e: any) {
-    return NextResponse.json({ ok: false, error: e?.message ?? 'Error' }, { status: 500 });
+  } catch (e) {
+    return NextResponse.json({ ok: false, error: 'server_error' }, { status: 500 });
   }
 }
