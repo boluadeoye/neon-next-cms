@@ -5,7 +5,6 @@ import MarkdownView from '../../../components/MarkdownView';
 import ProgressBar from '../../../components/ProgressBar';
 import { extractHeadings } from '../../../lib/md';
 import { readingTime } from '../../../lib/reading';
-import LikeButton from '../../../components/LikeButton';
 import ShareBar from '../../../components/ShareBar';
 import Comments from '../../../components/Comments';
 
@@ -80,7 +79,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           ) : null}
           <div className="actions-wrap">
             <div className="actions-bar">
-              <LikeButton slug={post.slug} />
               <ShareBar title={post.title} url={fullUrl} />
             </div>
           </div>
