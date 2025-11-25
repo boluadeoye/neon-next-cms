@@ -24,11 +24,35 @@ export default function Comments({ slug }: { slug: string }) {
   const [highlightId, setHighlightId] = useState<number | null>(null);
 
   const formRef = useRef<HTMLFormElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // Load saved name on mount and keep in sync across tabs
   useEffect(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('commenter_name') : null;
-    if (saved) { setName(saved); setNameLocked(true); }
+    try {
+      const saved = localStorage.getItem('commenter_name');
+      if (saved && saved.trim()) {
+        setName(saved.trim());
+        setNameLocked(true);
+      }
+      const onStorage = (e: StorageEvent) => {
+        if (e.key === 'commenter_name') {
+          const v = (e.newValue || '').trim();
+          if (v) { setName(v); setNameLocked(true); }
+          else { setName(''); setNameLocked(false); }
+        }
+      };
+      window.addEventListener('storage', onStorage);
+      return () => window.removeEventListener('storage', onStorage);
+    } catch {}
   }, []);
+
+  // Persist name as user types (so refresh won’t forget)
+  useEffect(() => {
+    try {
+      const v = name.trim();
+      if (v) localStorage.setItem('commenter_name', v);
+    } catch {}
+  }, [name]);
 
   async function load() {
     try {
@@ -44,8 +68,12 @@ export default function Comments({ slug }: { slug: string }) {
     const snippet = snippetRaw.length > 84 ? snippetRaw.slice(0, 84) + '…' : snippetRaw;
     setReplyTo(c.id);
     setReplyMeta({ id: c.id, name: c.name || 'Reader', snippet });
-    // Scroll the form into view
-    setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+
+    // Scroll to form and focus textarea
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => textareaRef.current?.focus(), 350);
+    }, 0);
   }
 
   function clearReply() {
@@ -68,10 +96,10 @@ export default function Comments({ slug }: { slug: string }) {
       });
       const data = await res.json();
       if (res.ok && data?.ok && data.comment) {
-        if (!nameLocked) {
-          localStorage.setItem('commenter_name', nm);
-          setNameLocked(true);
-        }
+        // Make sure name is remembered and locked
+        try { localStorage.setItem('commenter_name', nm); } catch {}
+        setNameLocked(true);
+
         const newId: number = data.comment.id;
 
         if (replyTo) {
@@ -82,13 +110,14 @@ export default function Comments({ slug }: { slug: string }) {
         }
 
         setMsg('');
-        // Scroll to the newly inserted comment and highlight it
+
+        // Scroll to the new comment and highlight
         setTimeout(() => {
           const el = document.getElementById(`c-${newId}`);
           if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           setHighlightId(newId);
           setTimeout(() => setHighlightId(null), 1600);
-        }, 100);
+        }, 120);
       }
     } finally { setLoading(false); }
   }
@@ -102,7 +131,7 @@ export default function Comments({ slug }: { slug: string }) {
   }
 
   function clearSavedName() {
-    localStorage.removeItem('commenter_name');
+    try { localStorage.removeItem('commenter_name'); } catch {}
     setNameLocked(false);
     setName('');
   }
@@ -126,14 +155,14 @@ export default function Comments({ slug }: { slug: string }) {
             required
           />
         ) : (
-          <div className="reply-banner small">
+          <div className="reply-banner small" role="status" aria-live="polite">
             Commenting as <b>{name}</b>
             <button type="button" className="link" onClick={clearSavedName} aria-label="Change name">change</button>
           </div>
         )}
 
         {replyMeta ? (
-          <div className="reply-banner">
+          <div className="reply-banner" role="status" aria-live="polite">
             <div className="rb-top">
               Replying to <b>{replyMeta.name}</b>
               <button type="button" className="chip-nav rb-cancel" onClick={clearReply}>Cancel</button>
@@ -143,6 +172,7 @@ export default function Comments({ slug }: { slug: string }) {
         ) : null}
 
         <textarea
+          ref={textareaRef}
           className="input"
           placeholder="Write a thoughtful comment…"
           value={msg}
@@ -172,7 +202,11 @@ function Node({ c, onReply, highlightId }: { c: Comment; onReply: (c: Comment)=>
 
       <div className="comment-actions" style={{ display:'flex', gap:10, marginTop:8, alignItems:'center' }}>
         <button type="button" className="chip-nav" onClick={()=>onReply(c)}>Reply</button>
-        {directReplies > 0 ? <span className="badge replies-badge" aria-label={`${directReplies} repl${directReplies>1?'ies':'y'}`}>{directReplies} {directReplies>1?'replies':'reply'}</span> : null}
+        {directReplies > 0 ? (
+          <span className="badge replies-badge" aria-label={`${directReplies} repl${directReplies>1?'ies':'y'}`}>
+            {directReplies} {directReplies>1?'replies':'reply'}
+          </span>
+        ) : null}
       </div>
 
       {c.children?.length ? (

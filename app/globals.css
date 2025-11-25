@@ -1986,3 +1986,18 @@ h1, h2, h3,
 .comment-new {
   animation: flashIn 1.4s ease-in-out 1;
 }
+.reply-banner {
+  display: grid; gap: 6px; padding: 10px 12px;
+  border: 1px solid rgba(10,20,40,.12);
+  background: linear-gradient(180deg, #fff, #f6f8fb);
+  color: #0b1321; border-radius: 10px; margin: 8px 0 10px;
+  box-shadow: 0 6px 14px rgba(13,35,64,.06);
+}
+.reply-banner.small { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; margin: 0 0 8px; }
+.rb-top { display:flex; gap:10px; align-items:center; }
+.rb-quote { color:#42506a; font-size:13px; }
+.rb-cancel { padding:6px 10px; }
+.badge { display:inline-flex; gap:6px; padding:4px 8px; border-radius:999px; font-size:12px; border:1px solid rgba(10,20,40,.14); background:linear-gradient(180deg,#fff,#f0f3f8); color:#0b1321; }
+.comment-children { border-left:2px solid rgba(10,20,40,.08); margin-top:10px; padding-left:10px; display:grid; gap:10px; }
+@keyframes flashIn { 0%{ background:#fff8e1; } 100%{ background:transparent; } }
+.comment-new { animation: flashIn 1.4s ease-in-out 1; }
