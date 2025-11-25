@@ -1,0 +1,165 @@
+==== BASIC ====
+/data/data/com.termux/files/home/neon-next-cms
+2025-11-24T15:17:51+01:00
+
+==== VERSIONS ====
+v22.20.0
+10.9.3
+
+package.json quick info:
+{
+  "name": "neon-next-cms",
+  "next": "^14.2.5",
+  "typescript": "^5.5.3"
+}
+
+==== GIT ====
+main
+## main...origin/main
+?? context-report.txt
+?? scripts/
+origin	git@github.com:boluadeoye/neon-next-cms.git (fetch)
+origin	git@github.com:boluadeoye/neon-next-cms.git (push)
+
+==== TOP-LEVEL FILES ====
+total 264
+drwx------.   9 u0_a862 u0_a862  4096 Nov 24 15:17 .
+drwx------.  18 u0_a862 u0_a862  4096 Nov 22 11:02 ..
+-rw-------.   1 u0_a862 u0_a862   117 Nov 22 10:54 .env.example
+-rw-------.   1 u0_a862 u0_a862   117 Nov 24 14:37 .env.local
+drwx------.   7 u0_a862 u0_a862  4096 Nov 24 15:17 .git
+-rw-------.   1 u0_a862 u0_a862    49 Nov 22 10:54 .gitignore
+drwx------.   2 u0_a862 u0_a862  4096 Nov 24 14:55 .next
+-rw-------.   1 u0_a862 u0_a862   234 Nov 22 10:56 README.md
+drwx------.  13 u0_a862 u0_a862  4096 Nov 23 14:05 app
+drwx------.   2 u0_a862 u0_a862  4096 Nov 24 14:55 components
+-rw-------.   1 u0_a862 u0_a862   448 Nov 24 15:17 context-report.txt
+drwx------.   2 u0_a862 u0_a862  4096 Nov 22 21:30 lib
+-rw-------.   1 u0_a862 u0_a862  8340 Nov 23 13:55 manual.md
+-rw-------.   1 u0_a862 u0_a862   228 Nov 24 14:37 next-env.d.ts
+-rw-------.   1 u0_a862 u0_a862   116 Nov 22 10:54 next.config.mjs
+drwx------. 153 u0_a862 u0_a862 12288 Nov 22 21:29 node_modules
+-rw-------.   1 u0_a862 u0_a862 91076 Nov 24 14:37 package-lock.json
+-rw-------.   1 u0_a862 u0_a862   858 Nov 22 21:29 package.json
+drwx------.   2 u0_a862 u0_a862  4096 Nov 24 15:17 scripts
+-rw-------.   1 u0_a862 u0_a862   654 Nov 24 14:37 tsconfig.json
+
+==== APP ROUTES (Next.js App Router) ====
+app/[slug]/page.tsx
+app/admin/layout.tsx
+app/admin/media/page.tsx
+app/admin/page.tsx
+app/admin/pages/[id]/page.tsx
+app/admin/pages/layout.tsx
+app/admin/pages/new/page.tsx
+app/admin/pages/page.tsx
+app/admin/posts/[id]/page.tsx
+app/admin/posts/layout.tsx
+app/admin/posts/new/page.tsx
+app/admin/posts/page.tsx
+app/admin/settings/page.tsx
+app/api/admin/media/route.ts
+app/api/admin/pages/[id]/route.ts
+app/api/admin/pages/route.ts
+app/api/admin/posts/[id]/route.ts
+app/api/admin/posts/route.ts
+app/api/admin/settings/route.ts
+app/api/auth/login/route.ts
+app/api/auth/logout/route.ts
+app/api/auth/me/route.ts
+app/api/auth/register/route.ts
+app/api/debug/post/route.ts
+app/api/debug/posts/route.ts
+app/api/health/route.ts
+app/api/public/comments/route.ts
+app/api/public/likes/route.ts
+app/api/upload/route.ts
+app/blog/[slug]/page.tsx
+app/blog/page.tsx
+app/layout.tsx
+app/login/page.tsx
+app/manual/page.tsx
+app/page.tsx
+app/portfolio/page.tsx
+app/register/page.tsx
+app/robots.txt/route.ts
+app/rss.xml/route.ts
+app/sitemap.xml/route.ts
+
+==== PAGES ROUTES (if any legacy pages/) ====
+(no pages/ dir found)
+
+==== COMPONENT/LIB DIRS ====
+./components
+./lib
+
+==== DEPENDENCIES (top-level names) ====
+@neondatabase/serverless
+@types/node
+@types/react
+@types/react-dom
+@vercel/blob
+bcryptjs
+easymde
+fast-xml-parser
+framer-motion
+jose
+lucide-react
+next
+react
+react-dom
+react-markdown
+react-simplemde-editor
+rehype-sanitize
+remark-gfm
+typescript
+
+==== ENV KEYS (.env*) — values masked ====
+[.env.local]
+DATABASE_URL
+JWT_SECRET
+NEXT_PUBLIC_SITE_NAME
+
+==== DB MIGRATIONS (last few files) ====
+
+==== COMMENTS SCHEMA HINT (grep) ====
+app/api/public/comments/route.ts:15:  if (!postId) return NextResponse.json({ ok: true, comments: [] });
+app/api/public/comments/route.ts:19:    FROM comments
+app/api/public/comments/route.ts:23:  return NextResponse.json({ ok: true, comments: rows });
+app/api/public/comments/route.ts:38:    await sql`INSERT INTO comments (post_id, name, message, status) VALUES (${postId}, ${name}, ${message}, 'approved')`;
+app/globals.css:250:.comments-wrap { margin-top: var(--s12); }
+app/globals.css:251:.comment-card { border:1px solid rgb(var(--line)); border-radius:14px; background:#fff; box-shadow: var(--shadow); padding:12px; }
+app/globals.css:252:.comment-author { font-weight:600; margin:0 0 4px; }
+app/globals.css:253:.comment-time { color:var(--muted); font-size:12px; }
+app/globals.css:254:.comment-body { margin:6px 0 0; white-space:pre-wrap; }
+app/globals.css:255:.comment-form { display:grid; gap:10px; margin-top:12px; }
+app/globals.css:256:.comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }
+app/globals.css:298:.comments-wrap { margin-top: var(--s12); }
+app/globals.css:299:.comment-card { border:1px solid rgb(var(--line)); border-radius:14px; background:#fff; box-shadow: var(--shadow); padding:12px; }
+app/globals.css:300:.comment-author { font-weight:600; margin:0 0 4px; }
+app/globals.css:301:.comment-time { color:var(--muted); font-size:12px; }
+app/globals.css:302:.comment-body { margin:6px 0 0; white-space:pre-wrap; }
+app/globals.css:303:.comment-form { display:grid; gap:10px; margin-top:12px; }
+app/globals.css:304:.comment-form .input { border:1px solid rgb(var(--line)); border-radius:12px; padding:10px 12px; background:#fff; color:var(--text); }
+app/globals.css:366:/* Ensure TOC and comments have inner padding that fits */
+app/globals.css:368:.comments-wrap, .actions-wrap { width: 100%; }
+app/globals.css:408:.actions-bar, .toc, .comment-card { max-width: 100%; }
+app/globals.css:852:.label, .input, .search, .comment-card, .actions-bar { font-family: var(--font-sans), sans-serif; }
+app/globals.css:860:.table, .comment-card, .actions-bar, .about-card, .blog-hero {
+app/globals.css:883:.table, .comment-card, .actions-bar, .about-card, .blog-hero {
+components/Comments.tsx:15:    const res = await fetch(`/api/public/comments?slug=${encodeURIComponent(slug)}`, { cache: 'no-store' });
+components/Comments.tsx:17:    if (res.ok) setItems(data.comments || []);
+components/Comments.tsx:24:    const res = await fetch('/api/public/comments', {
+components/Comments.tsx:37:    <div className="comments-wrap">
+components/Comments.tsx:42:          <div key={c.id} className="comment-card">
+components/Comments.tsx:43:            <div className="comment-author">{c.name}</div>
+components/Comments.tsx:44:            <div className="comment-time">{new Date(c.created_at).toLocaleString()}</div>
+components/Comments.tsx:45:            <div className="comment-body">{c.message}</div>
+components/Comments.tsx:48:        {items.length === 0 && !loading ? <p className="sec-sub">Be the first to comment.</p> : null}
+components/Comments.tsx:51:      <form className="comment-form" onSubmit={submit}>
+components/Comments.tsx:53:        <textarea className="input" placeholder="Write a thoughtful comment…" value={msg} onChange={e=>setMsg(e.target.value)} required rows={4} />
+components/Comments.tsx:55:          <button className="btn btn-ochre" type="submit">Post comment</button>
+node_modules/@swc/helpers/LICENSE:184:   comment syntax for the file format. We also recommend that a
+node_modules/@types/node/vm.d.ts:378:         * comment, this property will be set to the URL of the source map.
+node_modules/@types/node/assert.d.ts:721:         * adding a comment next to the specific code path that should not throw and keep
+node_modules/@types/node/assert.d.ts:894:         * adding a comment next to the specific code path that should not reject and keep

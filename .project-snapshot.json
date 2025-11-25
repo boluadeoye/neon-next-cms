@@ -1,0 +1,50 @@
+{
+  "name": "neon-next-cms",
+  "next": "^14.2.5",
+  "pages": [
+    "app/[slug]/page.tsx",
+    "app/admin/media/page.tsx",
+    "app/admin/page.tsx",
+    "app/admin/pages/[id]/page.tsx",
+    "app/admin/pages/new/page.tsx",
+    "app/admin/pages/page.tsx",
+    "app/admin/posts/[id]/page.tsx",
+    "app/admin/posts/new/page.tsx",
+    "app/admin/posts/page.tsx",
+    "app/admin/settings/page.tsx",
+    "app/blog/[slug]/page.tsx",
+    "app/blog/page.tsx",
+    "app/login/page.tsx",
+    "app/manual/page.tsx",
+    "app/page.tsx",
+    "app/portfolio/page.tsx",
+    "app/register/page.tsx"
+  ],
+  "apis": [
+    "app/api/admin/media/route.ts",
+    "app/api/admin/pages/[id]/route.ts",
+    "app/api/admin/pages/route.ts",
+    "app/api/admin/posts/[id]/route.ts",
+    "app/api/admin/posts/route.ts",
+    "app/api/admin/settings/route.ts",
+    "app/api/auth/login/route.ts",
+    "app/api/auth/logout/route.ts",
+    "app/api/auth/me/route.ts",
+    "app/api/auth/register/route.ts",
+    "app/api/debug/post/route.ts",
+    "app/api/debug/posts/route.ts",
+    "app/api/health/route.ts",
+    "app/api/public/comments/route.ts",
+    "app/api/public/likes/route.ts",
+    "app/api/upload/route.ts",
+    "app/robots.txt/route.ts",
+    "app/rss.xml/route.ts",
+    "app/sitemap.xml/route.ts"
+  ],
+  "layouts": [
+    "app/admin/layout.tsx",
+    "app/admin/pages/layout.tsx",
+    "app/admin/posts/layout.tsx",
+    "app/layout.tsx"
+  ]
+}
