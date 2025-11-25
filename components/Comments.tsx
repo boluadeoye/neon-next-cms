@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type Comment = {
   id: number;
@@ -11,13 +11,19 @@ type Comment = {
   children?: Comment[];
 };
 
+type ReplyMeta = { id: number; name: string; snippet: string };
+
 export default function Comments({ slug }: { slug: string }) {
   const [items, setItems] = useState<Comment[]>([]);
   const [name, setName] = useState('');
   const [msg, setMsg] = useState('');
   const [replyTo, setReplyTo] = useState<number | null>(null);
+  const [replyMeta, setReplyMeta] = useState<ReplyMeta | null>(null);
   const [loading, setLoading] = useState(false);
   const [nameLocked, setNameLocked] = useState(false);
+  const [highlightId, setHighlightId] = useState<number | null>(null);
+
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     const saved = typeof window !== 'undefined' ? localStorage.getItem('commenter_name') : null;
@@ -32,6 +38,20 @@ export default function Comments({ slug }: { slug: string }) {
     } catch {}
   }
   useEffect(() => { load(); }, [slug]);
+
+  function onReplyIntent(c: Comment) {
+    const snippetRaw = (c.message || '').replace(/\s+/g, ' ').trim();
+    const snippet = snippetRaw.length > 84 ? snippetRaw.slice(0, 84) + '…' : snippetRaw;
+    setReplyTo(c.id);
+    setReplyMeta({ id: c.id, name: c.name || 'Reader', snippet });
+    // Scroll the form into view
+    setTimeout(() => formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+  }
+
+  function clearReply() {
+    setReplyTo(null);
+    setReplyMeta(null);
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -52,14 +72,23 @@ export default function Comments({ slug }: { slug: string }) {
           localStorage.setItem('commenter_name', nm);
           setNameLocked(true);
         }
-        // Optimistic merge
+        const newId: number = data.comment.id;
+
         if (replyTo) {
           setItems(prev => nestReply(prev, replyTo!, data.comment));
+          clearReply();
         } else {
           setItems(prev => [...prev, data.comment]);
         }
+
         setMsg('');
-        setReplyTo(null);
+        // Scroll to the newly inserted comment and highlight it
+        setTimeout(() => {
+          const el = document.getElementById(`c-${newId}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          setHighlightId(newId);
+          setTimeout(() => setHighlightId(null), 1600);
+        }, 100);
       }
     } finally { setLoading(false); }
   }
@@ -83,11 +112,11 @@ export default function Comments({ slug }: { slug: string }) {
       <h3 className="sec-title">Comments</h3>
 
       <div style={{ display:'grid', gap:12 }}>
-        {items.map(c => <Node key={c.id} c={c} onReply={setReplyTo} />)}
+        {items.map(c => <Node key={c.id} c={c} onReply={onReplyIntent} highlightId={highlightId} />)}
         {items.length === 0 ? <p className="sec-sub">Be the first to comment.</p> : null}
       </div>
 
-      <form className="comment-form" onSubmit={submit} style={{ marginTop: 12 }}>
+      <form ref={formRef} className="comment-form" onSubmit={submit} style={{ marginTop: 12 }}>
         {!nameLocked ? (
           <input
             className="input"
@@ -97,16 +126,19 @@ export default function Comments({ slug }: { slug: string }) {
             required
           />
         ) : (
-          <div className="sec-sub" style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <div className="reply-banner small">
             Commenting as <b>{name}</b>
-            <button type="button" className="link" onClick={clearSavedName}>change</button>
+            <button type="button" className="link" onClick={clearSavedName} aria-label="Change name">change</button>
           </div>
         )}
 
-        {replyTo ? (
-          <div className="sec-sub">
-            Replying to comment #{replyTo}{' '}
-            <button type="button" className="link" onClick={()=>setReplyTo(null)}>cancel</button>
+        {replyMeta ? (
+          <div className="reply-banner">
+            <div className="rb-top">
+              Replying to <b>{replyMeta.name}</b>
+              <button type="button" className="chip-nav rb-cancel" onClick={clearReply}>Cancel</button>
+            </div>
+            <div className="rb-quote">“{replyMeta.snippet}”</div>
           </div>
         ) : null}
 
@@ -126,18 +158,26 @@ export default function Comments({ slug }: { slug: string }) {
   );
 }
 
-function Node({ c, onReply }: { c: Comment; onReply: (id:number)=>void }) {
+function Node({ c, onReply, highlightId }: { c: Comment; onReply: (c: Comment)=>void; highlightId: number | null }) {
+  const directReplies = (c.children?.length || 0);
+
   return (
-    <div className="comment-card">
-      <div className="comment-author">{c.name || 'Reader'}</div>
-      <div className="comment-time">{new Date(c.created_at).toLocaleString()}</div>
-      <div className="comment-body" style={{ marginTop:6 }}>{c.message}</div>
-      <div className="comment-actions" style={{ display:'flex', gap:10, marginTop:8 }}>
-        <button type="button" className="chip-nav" onClick={()=>onReply(c.id)}>Reply</button>
+    <div id={`c-${c.id}`} className={`comment-card${highlightId === c.id ? ' comment-new' : ''}`}>
+      <div className="comment-header">
+        <div className="comment-author">{c.name || 'Reader'}</div>
+        <div className="comment-time">{new Date(c.created_at).toLocaleString()}</div>
       </div>
+
+      <div className="comment-body" style={{ marginTop:6 }}>{c.message}</div>
+
+      <div className="comment-actions" style={{ display:'flex', gap:10, marginTop:8, alignItems:'center' }}>
+        <button type="button" className="chip-nav" onClick={()=>onReply(c)}>Reply</button>
+        {directReplies > 0 ? <span className="badge replies-badge" aria-label={`${directReplies} repl${directReplies>1?'ies':'y'}`}>{directReplies} {directReplies>1?'replies':'reply'}</span> : null}
+      </div>
+
       {c.children?.length ? (
-        <div style={{ borderLeft:'2px solid rgba(0,0,0,.06)', marginTop:10, paddingLeft:10, display:'grid', gap:10 }}>
-          {c.children.map(k => <Node key={k.id} c={k} onReply={onReply} />)}
+        <div className="comment-children">
+          {c.children.map(k => <Node key={k.id} c={k} onReply={onReply} highlightId={highlightId} />)}
         </div>
       ) : null}
     </div>
