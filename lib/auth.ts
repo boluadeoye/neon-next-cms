@@ -11,9 +11,7 @@ type DbUser = {
 
 export async function verifyUser(email: string, password: string) {
   try {
-    // FIX: Select everything. If a column is missing in DB, this might still error 
-    // depending on the driver, but it's safer than the weird CASE statement.
-    // Better yet, let's assume the schema is correct or fail gracefully.
+    // FIX: Simple select. If columns are missing, we handle it in JS.
     const rows = await sql`
       SELECT * FROM users WHERE email = ${email} LIMIT 1
     ` as unknown as DbUser[];
@@ -24,7 +22,7 @@ export async function verifyUser(email: string, password: string) {
       return null;
     }
 
-    // Handle legacy 'password' vs new 'password_hash'
+    // Support both old 'password' and new 'password_hash' columns
     const hash = u.password_hash || u.password;
     
     if (!hash) {
@@ -41,13 +39,14 @@ export async function verifyUser(email: string, password: string) {
     return { id: u.id, name: u.name, email: u.email };
   } catch (error) {
     console.error('[AUTH_DB_ERROR]', error);
-    throw error; // Let the route handler catch this
+    throw error; 
   }
 }
 
 export async function createUser(name: string, email: string, password: string) {
   const hash = await bcrypt.hash(password, 10);
   try {
+    // Try inserting with password_hash first
     const ins = await sql`
       INSERT INTO users (name, email, password_hash)
       VALUES (${name}, ${email}, ${hash})

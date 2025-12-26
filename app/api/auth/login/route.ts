@@ -6,18 +6,17 @@ export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json(); // Safe parse
+    const body = await req.json();
     const { email, password } = body;
 
     if (!email || !password) {
       return NextResponse.json({ ok: false, error: 'bad_request' }, { status: 400 });
     }
 
-    console.log(`[LOGIN_ATTEMPT] Email: ${email}`); // Log attempt
+    console.log(`[LOGIN_ATTEMPT] Email: ${email}`);
 
     const user = await verifyUser(email, password);
     if (!user) {
-      console.warn(`[LOGIN_FAILED] Invalid credentials for: ${email}`);
       return NextResponse.json({ ok: false, error: 'invalid_credentials' }, { status: 401 });
     }
 
@@ -39,7 +38,6 @@ export async function POST(req: Request) {
     return res;
 
   } catch (error: any) {
-    // CRITICAL: Log the actual error to Vercel Console
     console.error('[LOGIN_CRASH]', error);
     return NextResponse.json(
       { ok: false, error: 'server_error', details: error.message }, 
