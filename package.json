@@ -11,7 +11,7 @@
     "@neondatabase/serverless": "^0.9.5",
     "@next/swc-android-arm64": "npm:@next/swc-wasm-nodejs@14.2.5",
     "@next/swc-wasm-nodejs": "14.2.5",
-    "@vercel/blob": "^2.0.0",
+    "@vercel/blob": "2.0.0",
     "bcryptjs": "^3.0.3",
     "easymde": "^2.20.0",
     "fast-xml-parser": "^5.3.2",
