@@ -12,7 +12,6 @@ export default async function HomeMasthead(){
   `) as { key:string; value:any }[];
 
   const map = Object.fromEntries(rows.map(r=>[r.key,r.value]));
-  const displayName = 'Layo, The Novelist.'; // final locked display name
   const bio    = val(map.hero_bio, 'I write clear, compelling stories that move people to action.');
   const email  = val(map.hero_email, '');
   const avatar = val(map.hero_avatar_url, 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?q=80&w=480&auto=format&fit=crop');
@@ -27,7 +26,7 @@ export default async function HomeMasthead(){
       <div className="masthead">
         <div className="mast-bg" style={{ backgroundImage: `url(${cover})` }} />
 
-        {/* New: layered ambience */}
+        {/* Layered ambience */}
         <div className="mast-aurora" aria-hidden="true">
           <span className="a a1" />
           <span className="a a2" />
@@ -36,11 +35,7 @@ export default async function HomeMasthead(){
         <div className="mast-vignette" aria-hidden="true" />
 
         <div className="mast-overlay" />
-        <div className="mast-inner">
-          <h1 className="mast-name">
-            <span className="mast-logo">{displayName}</span>
-          </h1>
-        </div>
+        {/* ARCHITECT'S NOTE: mast-inner (text overlay) removed for a cleaner editorial look */}
       </div>
 
       <div className="mast-intro">
