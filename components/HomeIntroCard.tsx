@@ -1,29 +1,29 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
 export default function HomeIntroCard() {
-  // 1. Define the orchestration for the staggered entrance
-  const container = {
+  // Explicitly typing as Variants to satisfy the TypeScript compiler
+  const container: Variants = {
     hidden: { opacity: 0, y: 30 },
     show: {
       opacity: 1,
       y: 0,
       transition: { 
         duration: 0.7, 
-        ease:[0.16, 1, 0.3, 1], 
-        staggerChildren: 0.15 // Delays each child element
+        ease: [0.16, 1, 0.3, 1], 
+        staggerChildren: 0.15 
       }
     }
   };
 
-  const item = {
+  const item: Variants = {
     hidden: { opacity: 0, y: 15 },
     show: { 
       opacity: 1, 
       y: 0, 
-      transition: { duration: 0.5, ease:[0.16, 1, 0.3, 1] } 
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } 
     }
   };
 
@@ -77,7 +77,6 @@ export default function HomeIntroCard() {
         </motion.p>
 
         <motion.div variants={item} style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-          {/* Primary Button */}
           <motion.a 
             href="/blog" 
             whileHover={{ scale: 1.03, backgroundColor: '#111e36' }}
@@ -103,7 +102,6 @@ export default function HomeIntroCard() {
             <ArrowRight size={18} />
           </motion.a>
 
-          {/* Secondary Button */}
           <motion.a 
             href="/portfolio" 
             whileHover={{ scale: 1.03, backgroundColor: '#F8FAFC', borderColor: '#CBD5E1' }}
