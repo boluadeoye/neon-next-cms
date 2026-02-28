@@ -1,10 +1,10 @@
 import { unstable_noStore as noStore } from 'next/cache';
 import { sql } from '../lib/db';
-import Image from 'next/image';
 import HomeMasthead from '../components/HomeMasthead';
 import HomeIntroCard from '../components/HomeIntroCard';
 import PostCardFeatured from '../components/PostCardFeatured';
 import NewsMiniList from '../components/NewsMiniList';
+import PostImage from '../components/PostImage';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -38,12 +38,13 @@ export default async function Home(){
 
       <section className="section container">
         <div className="home-grid">
+          {/* Main feed */}
           <div>
             <h2 className="sec-title">Featured</h2>
             <p className="sec-sub">Hand‑picked highlights</p>
             <div className="h-scroll" style={{ marginTop:12 }}>
               {featured.map(p => (
-                <PostCardFeatured key={p.id} title={p.title} slug={p.slug} cover={p.cover_image_url||undefined} date={p.d||undefined} />
+                <PostCardFeatured key={p.id} title={p.title} slug={p.slug} cover={p.cover_image_url} date={p.d} />
               ))}
             </div>
 
@@ -52,13 +53,9 @@ export default async function Home(){
             <div style={{ display:'grid', gap:16 }}>
               {latest.map(p => (
                 <div key={p.id} className="post-card" style={{ position: 'relative', overflow: 'hidden' }}>
-                  {p.cover_image_url ? (
-                    <div style={{ position: 'relative', width: '100%', height: '200px' }}>
-                      <Image src={p.cover_image_url} alt="" fill unoptimized style={{ objectFit: 'cover' }} />
-                    </div>
-                  ) : (
-                    <div style={{ height: 200, background:'#eef2f7' }} />
-                  )}
+                  <div style={{ position: 'relative', width: '100%', height: '200px', backgroundColor: '#f0f0f0' }}>
+                    <PostImage src={p.cover_image_url} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                  </div>
                   <div className="post-body">
                     <h3 className="post-title"><a href={`/blog/${p.slug}`}>{p.title}</a></h3>
                     <div className="post-meta">{p.d ? new Date(p.d).toLocaleDateString() : ''}</div>
@@ -70,19 +67,16 @@ export default async function Home(){
             </div>
           </div>
 
+          {/* Sidebar */}
           <aside>
             <div className="widget">
               <h3>Recent Posts</h3>
               <div className="recent-list">
                 {recent.map(p => (
                   <div key={p.id} className="recent-item">
-                    {p.cover_image_url ? (
-                      <div className="recent-thumb" style={{ position: 'relative', overflow: 'hidden' }}>
-                        <Image src={p.cover_image_url} alt="" fill unoptimized style={{ objectFit: 'cover' }} />
-                      </div>
-                    ) : (
-                      <div className="recent-thumb" />
-                    )}
+                    <div className="recent-thumb" style={{ position: 'relative', overflow: 'hidden', backgroundColor: '#f0f0f0' }}>
+                      <PostImage src={p.cover_image_url} alt={p.title} fill style={{ objectFit: 'cover' }} />
+                    </div>
                     <div>
                       <a href={`/blog/${p.slug}`}>{p.title}</a>
                       <div className="post-meta">{p.d ? new Date(p.d).toLocaleDateString() : ''}</div>
