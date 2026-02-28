@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function PostCardFeatured({ title, slug, excerpt, cover, date }:{
   title:string; slug:string; excerpt?:string|null; cover?:string|null; date?:string|null;
@@ -11,8 +12,18 @@ export default function PostCardFeatured({ title, slug, excerpt, cover, date }:{
       whileHover={{ y: -2 }}
       whileTap={{ scale: .98 }}
       transition={{ type:'spring', stiffness:260, damping:22 }}
+      style={{ position: 'relative', overflow: 'hidden' }}
     >
-      {cover ? <img className="feature-media" src={cover} alt="" /> : null}
+      {cover ? (
+        <Image 
+          className="feature-media" 
+          src={cover} 
+          alt="" 
+          fill 
+          unoptimized
+          style={{ objectFit: 'cover' }}
+        />
+      ) : null}
       <div className="feature-grad" />
       <div className="feature-body">
         <h3 className="feature-title">{title}</h3>
